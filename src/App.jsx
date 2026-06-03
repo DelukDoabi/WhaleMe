@@ -57,8 +57,11 @@ export default function App() {
 
       {/* Footer */}
       <footer className="border-t border-slate-700/50 mt-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 text-center text-xs text-slate-500">
-          WhaleMe — {selectedGame.name} Market Profit Calculator · Made for traders, by traders
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between text-xs text-slate-500">
+          <span>WhaleMe — {selectedGame.name} Market Profit Calculator · Made for traders, by traders</span>
+          <span className="font-mono text-[10px] text-slate-600">
+            v{__APP_VERSION__}{__COMMIT_SHA__ !== 'dev' ? ` · ${__COMMIT_SHA__.slice(0, 7)}` : ''}
+          </span>
         </div>
       </footer>
     </div>
