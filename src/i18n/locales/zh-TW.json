@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "登入"
+  },
   "header": {
     "subtitle": "市場利潤計算器"
   },

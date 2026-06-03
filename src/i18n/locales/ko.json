@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "로그인"
+  },
   "header": {
     "subtitle": "시장 수익 계산기"
   },

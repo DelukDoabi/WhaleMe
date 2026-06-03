@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "Entrar"
+  },
   "header": {
     "subtitle": "Calculadora de Lucro"
   },

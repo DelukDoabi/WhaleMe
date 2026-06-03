@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "Connexion"
+  },
   "header": {
     "subtitle": "Calculateur de Profit"
   },

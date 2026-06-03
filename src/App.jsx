@@ -5,6 +5,7 @@ import Tabs from './components/Tabs'
 import ThemeToggle from './components/ThemeToggle'
 import GameSelector from './components/GameSelector'
 import LanguageSelector from './components/LanguageSelector'
+import AuthButton from './components/AuthButton'
 import CraftCalculator from './components/CraftCalculator'
 import FlipCalculator from './components/FlipCalculator'
 import Comparator from './components/Comparator'
@@ -36,6 +37,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-3">
             <GameSelector selectedGame={selectedGame} onGameChange={setSelectedGame} />
+            <AuthButton />
             <LanguageSelector />
             <ThemeToggle />
           </div>

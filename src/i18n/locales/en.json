@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "Sign in"
+  },
   "header": {
     "subtitle": "Market Profit Calculator"
   },

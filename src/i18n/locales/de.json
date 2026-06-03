@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "Anmelden"
+  },
   "header": {
     "subtitle": "Marktgewinn-Rechner"
   },

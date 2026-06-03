@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "signIn": "Iniciar sesión"
+  },
   "header": {
     "subtitle": "Calculadora de Beneficios"
   },
