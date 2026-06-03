@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-const AuthContext = createContext({ user: null, loading: true, signIn: () => {}, signOut: () => {} })
+const AuthContext = createContext({ user: null, loading: true, signIn: () => {}, signOut: () => {}, available: false })
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, available: !!supabase }}>
       {children}
     </AuthContext.Provider>
   )

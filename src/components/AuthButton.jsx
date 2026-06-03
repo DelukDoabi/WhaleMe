@@ -2,10 +2,10 @@ import { useAuth } from '../contexts/AuthContext'
 import { useTranslation } from 'react-i18next'
 
 export default function AuthButton() {
-  const { user, loading, signIn, signOut } = useAuth()
+  const { user, loading, signIn, signOut, available } = useAuth()
   const { t } = useTranslation()
 
-  if (loading) return null
+  if (!available || loading) return null
 
   if (user) {
     return (
