@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-profit: #10b981;
+    --color-loss: #f43f5e;
+    --color-warning: #f59e0b;
+    --color-accent: #7c3aed;
+  }
+
+  /* Light mode overrides */
+  html:not(.dark) body {
+    @apply bg-slate-50 text-slate-900;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-slate-900/80 border border-slate-700/50 rounded-xl p-5 backdrop-blur-sm
+           transition-all duration-200 hover:border-slate-600/50;
+  }
+
+  html:not(.dark) .card {
+    @apply bg-white border-slate-200 hover:border-slate-300;
+  }
+
+  .metric-card {
+    @apply bg-slate-800/60 rounded-lg p-4 border border-slate-700/30;
+  }
+
+  html:not(.dark) .metric-card {
+    @apply bg-slate-100 border-slate-200;
+  }
+
+  .input-field {
+    @apply w-full bg-slate-800 border border-slate-600/50 rounded-lg px-3 py-2 text-sm
+           text-slate-100 placeholder-slate-500 outline-none
+           focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/30
+           transition-all duration-200;
+  }
+
+  html:not(.dark) .input-field {
+    @apply bg-white border-slate-300 text-slate-900 placeholder-slate-400
+           focus:border-violet-500 focus:ring-violet-500/20;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+           cursor-pointer select-none;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-violet-600 to-violet-500 text-white
+           hover:from-violet-500 hover:to-violet-400 shadow-lg shadow-violet-500/20;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border border-slate-600/50 text-slate-300
+           hover:bg-slate-800 hover:border-slate-500;
+  }
+
+  html:not(.dark) .btn-ghost {
+    @apply border-slate-300 text-slate-700 hover:bg-slate-100 hover:border-slate-400;
+  }
+}
