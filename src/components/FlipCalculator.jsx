@@ -7,12 +7,12 @@ import BreakEvenBox from './ui/BreakEvenBox'
 import RiskBadge from './ui/RiskBadge'
 import Slider from './ui/Slider'
 
-export default function FlipCalculator() {
+export default function FlipCalculator({ game }) {
   const [buyPrice, setBuyPrice] = useState(500)
   const [sellPrice, setSellPrice] = useState(750)
   const [qty, setQty] = useState(10)
-  const [taxRate, setTaxRate] = useState(20)
-  const [regFee, setRegFee] = useState(11)
+  const [taxRate, setTaxRate] = useState(game?.defaultTaxRate ?? 20)
+  const [regFee, setRegFee] = useState(game?.defaultRegFee ?? 11)
 
   const tax = taxRate / 100
 

@@ -11,12 +11,12 @@ const defaultMaterials = [
   { id: 2, name: 'Solvent', unitCost: 400, quantity: 1 },
 ]
 
-export default function CraftCalculator() {
+export default function CraftCalculator({ game }) {
   const [itemName, setItemName] = useState('')
   const [qty, setQty] = useState(1)
   const [materials, setMaterials] = useState(defaultMaterials)
-  const [taxRate, setTaxRate] = useState(20)
-  const [regFee, setRegFee] = useState(11)
+  const [taxRate, setTaxRate] = useState(game?.defaultTaxRate ?? 20)
+  const [regFee, setRegFee] = useState(game?.defaultRegFee ?? 11)
   const [salePrice, setSalePrice] = useState(800)
   const [nextId, setNextId] = useState(3)
 

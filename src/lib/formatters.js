@@ -1,11 +1,12 @@
 /**
- * Format a number as Kinah currency
+ * Format a number as game currency
  * @param {number} n
+ * @param {string} [currency='₭'] - currency symbol
  * @returns {string}
  */
-export const fmtKinah = (n) => {
+export const fmtKinah = (n, currency = '₭') => {
   if (n === null || n === undefined || isNaN(n)) return '—';
-  return Math.round(n).toLocaleString() + ' ₭';
+  return Math.round(n).toLocaleString() + ' ' + currency;
 };
 
 /**

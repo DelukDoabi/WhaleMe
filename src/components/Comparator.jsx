@@ -9,7 +9,7 @@ const defaultItems = [
   { id: 3, name: 'Orichalcum Ore', matCost: 500, fee: 11, sellPrice: 900, tax: 20 },
 ]
 
-export default function Comparator() {
+export default function Comparator({ game }) {
   const [items, setItems] = useState(defaultItems)
   const [nextId, setNextId] = useState(4)
 
