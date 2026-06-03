@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "시장 수익 계산기"
+  },
+  "footer": {
+    "tagline": "상인을 위해, 상인이 만듦"
+  },
+  "tabs": {
+    "craft": "제작 / 레시피",
+    "flip": "되팔기",
+    "compare": "비교"
+  },
+  "craft": {
+    "itemInfo": "아이템 정보",
+    "itemName": "아이템 이름 (선택)",
+    "itemNamePlaceholder": "예: 오리하르콘 주괴",
+    "quantityProduced": "제작 수량",
+    "materials": "재료",
+    "material": "재료",
+    "unitCost": "단가",
+    "qty": "수량",
+    "addMaterial": "+ 재료 추가",
+    "marketSettings": "시장 설정",
+    "taxRate": "세율",
+    "regFee": "등록 수수료 (건당)",
+    "salePrice": "예상 판매가",
+    "savedRecipes": "저장된 레시피",
+    "new": "+ 새로 만들기",
+    "save": "저장",
+    "saved": "저장됨!",
+    "noSaved": "저장된 레시피가 없습니다. 양식을 작성하고 저장을 클릭하세요.",
+    "emptyState": "재료와 판매가를 입력하면 결과를 확인할 수 있습니다",
+    "emptyStateHint": "손익분기점, 이익, 마진, 시뮬레이션이 여기에 표시됩니다"
+  },
+  "flip": {
+    "details": "되팔기 상세",
+    "buyPrice": "구매가 (단위당)",
+    "sellPrice": "판매가 (단위당)",
+    "quantity": "수량",
+    "taxRate": "세율",
+    "regFee": "등록 수수료 (건당)"
+  },
+  "compare": {
+    "title": "비교 아이템",
+    "addItem": "+ 아이템 추가",
+    "itemName": "아이템 이름",
+    "matCost": "재료비",
+    "fee": "수수료",
+    "salePrice": "판매가",
+    "tax": "세율 %",
+    "profitUnit": "단위 수익",
+    "roi": "ROI %",
+    "margin": "마진 %",
+    "bestRoi": "최고 ROI: {{name}}",
+    "noProfitable": "수익성 있는 아이템 없음",
+    "perUnit": "/단위"
+  },
+  "results": {
+    "breakEven": "손익분기점 가격",
+    "atLoss": "현재 손실 중",
+    "matCost": "재료비",
+    "fee": "수수료",
+    "costUnit": "단가",
+    "netProfitTotal": "순이익 (합계)",
+    "netProfitUnit": "순이익 (단위당)",
+    "profitUnit": "이익 / 단위",
+    "margin": "마진",
+    "roi": "ROI",
+    "pricingSuggestions": "가격 제안",
+    "targetMargin": "목표 마진",
+    "suggestedPrice": "제안 가격",
+    "netProfit": "순이익",
+    "priceSimulation": "가격 시뮬레이션",
+    "salePriceCol": "판매가",
+    "breakEvenTag": "(손익분기)"
+  },
+  "risk": {
+    "low": "저위험",
+    "medium": "중위험",
+    "high": "고위험"
+  },
+  "gameSelector": {
+    "moreGames": "더 많은 게임이 곧 추가됩니다…"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "Marktgewinn-Rechner"
+  },
+  "footer": {
+    "tagline": "Von Händlern, für Händler"
+  },
+  "tabs": {
+    "craft": "Herstellung / Rezept",
+    "flip": "Markt-Flip",
+    "compare": "Vergleich"
+  },
+  "craft": {
+    "itemInfo": "Gegenstandsinfo",
+    "itemName": "Gegenstandsname (optional)",
+    "itemNamePlaceholder": "z.B. Orichalcum-Barren",
+    "quantityProduced": "Hergestellte Menge",
+    "materials": "Materialien",
+    "material": "Material",
+    "unitCost": "Stückkosten",
+    "qty": "Anz.",
+    "addMaterial": "+ Material hinzufügen",
+    "marketSettings": "Markt-Einstellungen",
+    "taxRate": "Steuersatz",
+    "regFee": "Registrierungsgebühr (pro Anzeige)",
+    "salePrice": "Geschätzter Verkaufspreis",
+    "savedRecipes": "Gespeicherte Rezepte",
+    "new": "+ Neu",
+    "save": "Speichern",
+    "saved": "Gespeichert!",
+    "noSaved": "Keine gespeicherten Rezepte. Formular ausfüllen und Speichern klicken.",
+    "emptyState": "Materialien und Verkaufspreis eingeben, um Ergebnisse zu sehen",
+    "emptyStateHint": "Break-even, Gewinn, Marge und Simulationen erscheinen hier"
+  },
+  "flip": {
+    "details": "Flip-Details",
+    "buyPrice": "Kaufpreis (pro Stück)",
+    "sellPrice": "Verkaufspreis (pro Stück)",
+    "quantity": "Menge",
+    "taxRate": "Steuersatz",
+    "regFee": "Registrierungsgebühr (pro Anzeige)"
+  },
+  "compare": {
+    "title": "Gegenstände vergleichen",
+    "addItem": "+ Gegenstand hinzufügen",
+    "itemName": "Name",
+    "matCost": "Mat.-Kosten",
+    "fee": "Gebühr",
+    "salePrice": "Verkaufspreis",
+    "tax": "Steuer %",
+    "profitUnit": "Gewinn/Stk.",
+    "roi": "ROI %",
+    "margin": "Marge %",
+    "bestRoi": "Bester ROI: {{name}}",
+    "noProfitable": "Keine profitablen Gegenstände",
+    "perUnit": "/Stk."
+  },
+  "results": {
+    "breakEven": "Break-even-Preis",
+    "atLoss": "Derzeit mit Verlust",
+    "matCost": "Mat.-Kosten",
+    "fee": "Gebühr",
+    "costUnit": "Kosten/Stk.",
+    "netProfitTotal": "Nettogewinn (gesamt)",
+    "netProfitUnit": "Nettogewinn (pro Stück)",
+    "profitUnit": "Gewinn / Stk.",
+    "margin": "Marge",
+    "roi": "ROI",
+    "pricingSuggestions": "Preisvorschläge",
+    "targetMargin": "Zielmarge",
+    "suggestedPrice": "Vorgeschlagener Preis",
+    "netProfit": "Nettogewinn",
+    "priceSimulation": "Preissimulation",
+    "salePriceCol": "Verkaufspreis",
+    "breakEvenTag": "(Break-even)"
+  },
+  "risk": {
+    "low": "Niedriges Risiko",
+    "medium": "Mittleres Risiko",
+    "high": "Hohes Risiko"
+  },
+  "gameSelector": {
+    "moreGames": "Weitere Spiele kommen bald…"
+  }
+}

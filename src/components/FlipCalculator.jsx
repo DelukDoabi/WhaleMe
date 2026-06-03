@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import * as calc from '../lib/formulas'
 import { fmtKinah, fmtPct } from '../lib/formatters'
 import MetricCard from './ui/MetricCard'
@@ -8,6 +9,7 @@ import RiskBadge from './ui/RiskBadge'
 import Slider from './ui/Slider'
 
 export default function FlipCalculator({ game }) {
+  const { t } = useTranslation()
   const [buyPrice, setBuyPrice] = useState(500)
   const [sellPrice, setSellPrice] = useState(750)
   const [qty, setQty] = useState(10)
@@ -35,10 +37,10 @@ export default function FlipCalculator({ game }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* LEFT — Inputs */}
       <div className="card">
-        <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">Flip details</h3>
+        <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">{t('flip.details')}</h3>
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-slate-400 block mb-1">Buy price (per unit)</label>
+            <label className="text-xs text-slate-400 block mb-1">{t('flip.buyPrice')}</label>
             <input
               type="number"
               className="input-field"
@@ -48,7 +50,7 @@ export default function FlipCalculator({ game }) {
             />
           </div>
           <div>
-            <label className="text-xs text-slate-400 block mb-1">Sell price (per unit)</label>
+            <label className="text-xs text-slate-400 block mb-1">{t('flip.sellPrice')}</label>
             <input
               type="number"
               className="input-field"
@@ -58,7 +60,7 @@ export default function FlipCalculator({ game }) {
             />
           </div>
           <div>
-            <label className="text-xs text-slate-400 block mb-1">Quantity</label>
+            <label className="text-xs text-slate-400 block mb-1">{t('flip.quantity')}</label>
             <input
               type="number"
               className="input-field"
@@ -69,14 +71,14 @@ export default function FlipCalculator({ game }) {
           </div>
           <Slider
             id="flip-tax"
-            label="Tax rate"
+            label={t('flip.taxRate')}
             value={taxRate}
             onChange={setTaxRate}
             min={0}
             max={50}
           />
           <div>
-            <label className="text-xs text-slate-400 block mb-1">Registration fee (per listing)</label>
+            <label className="text-xs text-slate-400 block mb-1">{t('flip.regFee')}</label>
             <input
               type="number"
               className="input-field"
@@ -92,7 +94,7 @@ export default function FlipCalculator({ game }) {
       <div className="space-y-5">
         <BreakEvenBox
           isLoss={results.isLoss}
-          label={results.isLoss ? 'Currently at a loss' : 'Break-even price'}
+          label={results.isLoss ? t('results.atLoss') : t('results.breakEven')}
           price={fmtKinah(results.bep)}
         >
           <div className="flex items-center gap-2 justify-end">
@@ -102,22 +104,22 @@ export default function FlipCalculator({ game }) {
 
         <div className="grid grid-cols-2 gap-3">
           <MetricCard
-            label="Net profit (total)"
+            label={t('results.netProfitTotal')}
             value={fmtKinah(results.profitTotal)}
             colorClass={profitColor(results.profitTotal)}
           />
           <MetricCard
-            label="Profit / unit"
+            label={t('results.profitUnit')}
             value={fmtKinah(results.profitUnit)}
             colorClass={profitColor(results.profitUnit)}
           />
           <MetricCard
-            label="ROI"
+            label={t('results.roi')}
             value={fmtPct(results.roiPct)}
             colorClass={profitColor(results.roiPct)}
           />
           <MetricCard
-            label="Margin"
+            label={t('results.margin')}
             value={fmtPct(results.marginPct)}
             colorClass={profitColor(results.marginPct)}
           />

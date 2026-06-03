@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "Calculadora de Beneficios"
+  },
+  "footer": {
+    "tagline": "Hecho para comerciantes, por comerciantes"
+  },
+  "tabs": {
+    "craft": "Fabricación / Receta",
+    "flip": "Reventa",
+    "compare": "Comparador"
+  },
+  "craft": {
+    "itemInfo": "Info del objeto",
+    "itemName": "Nombre del objeto (opcional)",
+    "itemNamePlaceholder": "ej. Lingote de Orichalcum",
+    "quantityProduced": "Cantidad producida",
+    "materials": "Materiales",
+    "material": "Material",
+    "unitCost": "Coste unit.",
+    "qty": "Cant.",
+    "addMaterial": "+ Añadir material",
+    "marketSettings": "Configuración del mercado",
+    "taxRate": "Tasa de impuesto",
+    "regFee": "Tarifa de registro (por anuncio)",
+    "salePrice": "Precio de venta estimado",
+    "savedRecipes": "Recetas guardadas",
+    "new": "+ Nueva",
+    "save": "Guardar",
+    "saved": "¡Guardado!",
+    "noSaved": "No hay recetas guardadas. Rellena el formulario y haz clic en Guardar.",
+    "emptyState": "Añade materiales y precio de venta para ver resultados",
+    "emptyStateHint": "Punto de equilibrio, beneficio, margen y simulaciones aparecerán aquí"
+  },
+  "flip": {
+    "details": "Detalles de reventa",
+    "buyPrice": "Precio de compra (por unidad)",
+    "sellPrice": "Precio de venta (por unidad)",
+    "quantity": "Cantidad",
+    "taxRate": "Tasa de impuesto",
+    "regFee": "Tarifa de registro (por anuncio)"
+  },
+  "compare": {
+    "title": "Objetos a comparar",
+    "addItem": "+ Añadir objeto",
+    "itemName": "Nombre",
+    "matCost": "Coste mat.",
+    "fee": "Tarifa",
+    "salePrice": "Precio venta",
+    "tax": "Impuesto %",
+    "profitUnit": "Beneficio/ud.",
+    "roi": "ROI %",
+    "margin": "Margen %",
+    "bestRoi": "Mejor ROI: {{name}}",
+    "noProfitable": "Sin objetos rentables",
+    "perUnit": "/ud."
+  },
+  "results": {
+    "breakEven": "Punto de equilibrio",
+    "atLoss": "Actualmente con pérdidas",
+    "matCost": "Coste mat.",
+    "fee": "Tarifa",
+    "costUnit": "Coste/ud.",
+    "netProfitTotal": "Beneficio neto (total)",
+    "netProfitUnit": "Beneficio neto (por unidad)",
+    "profitUnit": "Beneficio / ud.",
+    "margin": "Margen",
+    "roi": "ROI",
+    "pricingSuggestions": "Sugerencias de precio",
+    "targetMargin": "Margen objetivo",
+    "suggestedPrice": "Precio sugerido",
+    "netProfit": "Beneficio neto",
+    "priceSimulation": "Simulación de precios",
+    "salePriceCol": "Precio venta",
+    "breakEvenTag": "(equilibrio)"
+  },
+  "risk": {
+    "low": "Riesgo bajo",
+    "medium": "Riesgo medio",
+    "high": "Riesgo alto"
+  },
+  "gameSelector": {
+    "moreGames": "Más juegos próximamente…"
+  }
+}

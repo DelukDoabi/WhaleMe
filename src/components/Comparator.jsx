@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import * as calc from '../lib/formulas'
 import { fmtKinah, fmtPct } from '../lib/formatters'
 
@@ -10,6 +11,7 @@ const defaultItems = [
 ]
 
 export default function Comparator({ game }) {
+  const { t } = useTranslation()
   const [items, setItems] = useState(defaultItems)
   const [nextId, setNextId] = useState(4)
 
@@ -52,9 +54,9 @@ export default function Comparator({ game }) {
     <div className="space-y-5">
       <div className="card">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">Items to compare</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">{t('compare.title')}</h3>
           <button onClick={addItem} className="btn btn-ghost text-xs">
-            + Add item
+            {t('compare.addItem')}
           </button>
         </div>
 
@@ -62,14 +64,14 @@ export default function Comparator({ game }) {
           <table className="w-full text-sm min-w-[700px]">
             <thead>
               <tr className="text-xs text-slate-500 border-b border-slate-700/50">
-                <th className="text-left py-2 font-medium">Item name</th>
-                <th className="text-left py-2 font-medium">Mat cost</th>
-                <th className="text-left py-2 font-medium">Fee</th>
-                <th className="text-left py-2 font-medium">Sale price</th>
-                <th className="text-left py-2 font-medium">Tax %</th>
-                <th className="text-left py-2 font-medium">Profit/unit</th>
-                <th className="text-left py-2 font-medium">ROI %</th>
-                <th className="text-left py-2 font-medium">Margin %</th>
+                <th className="text-left py-2 font-medium">{t('compare.itemName')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.matCost')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.fee')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.salePrice')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.tax')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.profitUnit')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.roi')}</th>
+                <th className="text-left py-2 font-medium">{t('compare.margin')}</th>
                 <th className="w-8"></th>
               </tr>
             </thead>
@@ -165,10 +167,10 @@ export default function Comparator({ game }) {
         >
           <div>
             <div className={`text-xs font-medium uppercase tracking-wide ${computed[bestIdx].roiPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {computed[bestIdx].roiPct >= 0 ? `Best ROI: ${computed[bestIdx].name}` : 'No profitable items'}
+              {computed[bestIdx].roiPct >= 0 ? t('compare.bestRoi', { name: computed[bestIdx].name }) : t('compare.noProfitable')}
             </div>
             <div className={`text-xl font-bold mt-1 ${computed[bestIdx].roiPct >= 0 ? 'text-emerald-300' : 'text-rose-300'}`}>
-              {fmtPct(computed[bestIdx].roiPct)} ROI · {fmtKinah(computed[bestIdx].profitUnit)}/unit
+              {fmtPct(computed[bestIdx].roiPct)} ROI · {fmtKinah(computed[bestIdx].profitUnit)}{t('compare.perUnit')}
             </div>
           </div>
         </motion.div>

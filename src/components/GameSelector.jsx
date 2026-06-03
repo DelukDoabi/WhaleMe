@@ -1,8 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import games from '../lib/games'
 
 export default function GameSelector({ selectedGame, onGameChange }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -65,7 +67,7 @@ export default function GameSelector({ selectedGame, onGameChange }) {
 
             {games.length === 1 && (
               <div className="px-3.5 py-2 text-[10px] text-slate-600 border-t border-slate-700/50">
-                More games coming soon…
+                {t('gameSelector.moreGames')}
               </div>
             )}
           </motion.div>

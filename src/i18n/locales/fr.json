@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "Calculateur de Profit"
+  },
+  "footer": {
+    "tagline": "Fait pour les marchands, par les marchands"
+  },
+  "tabs": {
+    "craft": "Craft / Recette",
+    "flip": "Revente Marché",
+    "compare": "Comparateur"
+  },
+  "craft": {
+    "itemInfo": "Infos objet",
+    "itemName": "Nom de l'objet (optionnel)",
+    "itemNamePlaceholder": "ex. Lingot d'Orichalque",
+    "quantityProduced": "Quantité produite",
+    "materials": "Matériaux",
+    "material": "Matériau",
+    "unitCost": "Coût unit.",
+    "qty": "Qté",
+    "addMaterial": "+ Ajouter un matériau",
+    "marketSettings": "Paramètres du marché",
+    "taxRate": "Taux de taxe",
+    "regFee": "Frais d'inscription (par annonce)",
+    "salePrice": "Prix de vente estimé",
+    "savedRecipes": "Recettes sauvegardées",
+    "new": "+ Nouveau",
+    "save": "Sauvegarder",
+    "saved": "Sauvegardé !",
+    "noSaved": "Aucune recette sauvegardée. Remplissez le formulaire et cliquez sur Sauvegarder.",
+    "emptyState": "Ajoutez vos matériaux et un prix de vente pour voir les résultats",
+    "emptyStateHint": "Seuil de rentabilité, profit, marge et simulations apparaîtront ici"
+  },
+  "flip": {
+    "details": "Détails du flip",
+    "buyPrice": "Prix d'achat (par unité)",
+    "sellPrice": "Prix de revente (par unité)",
+    "quantity": "Quantité",
+    "taxRate": "Taux de taxe",
+    "regFee": "Frais d'inscription (par annonce)"
+  },
+  "compare": {
+    "title": "Objets à comparer",
+    "addItem": "+ Ajouter un objet",
+    "itemName": "Nom de l'objet",
+    "matCost": "Coût mat.",
+    "fee": "Frais",
+    "salePrice": "Prix de vente",
+    "tax": "Taxe %",
+    "profitUnit": "Profit/unité",
+    "roi": "ROI %",
+    "margin": "Marge %",
+    "bestRoi": "Meilleur ROI : {{name}}",
+    "noProfitable": "Aucun objet rentable",
+    "perUnit": "/unité"
+  },
+  "results": {
+    "breakEven": "Seuil de rentabilité",
+    "atLoss": "Actuellement à perte",
+    "matCost": "Coût mat.",
+    "fee": "Frais",
+    "costUnit": "Coût/unité",
+    "netProfitTotal": "Profit net (total)",
+    "netProfitUnit": "Profit net (par unité)",
+    "profitUnit": "Profit / unité",
+    "margin": "Marge",
+    "roi": "ROI",
+    "pricingSuggestions": "Suggestions de prix",
+    "targetMargin": "Marge cible",
+    "suggestedPrice": "Prix suggéré",
+    "netProfit": "Profit net",
+    "priceSimulation": "Simulation de prix",
+    "salePriceCol": "Prix de vente",
+    "breakEvenTag": "(seuil)"
+  },
+  "risk": {
+    "low": "Risque faible",
+    "medium": "Risque moyen",
+    "high": "Risque élevé"
+  },
+  "gameSelector": {
+    "moreGames": "D'autres jeux arrivent bientôt…"
+  }
+}

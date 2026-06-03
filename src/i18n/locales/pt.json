@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "Calculadora de Lucro"
+  },
+  "footer": {
+    "tagline": "Feito para comerciantes, por comerciantes"
+  },
+  "tabs": {
+    "craft": "Craft / Receita",
+    "flip": "Revenda",
+    "compare": "Comparador"
+  },
+  "craft": {
+    "itemInfo": "Info do item",
+    "itemName": "Nome do item (opcional)",
+    "itemNamePlaceholder": "ex. Lingote de Orichalcum",
+    "quantityProduced": "Quantidade produzida",
+    "materials": "Materiais",
+    "material": "Material",
+    "unitCost": "Custo unit.",
+    "qty": "Qtd.",
+    "addMaterial": "+ Adicionar material",
+    "marketSettings": "Configurações do mercado",
+    "taxRate": "Taxa de imposto",
+    "regFee": "Taxa de registro (por anúncio)",
+    "salePrice": "Preço de venda estimado",
+    "savedRecipes": "Receitas salvas",
+    "new": "+ Nova",
+    "save": "Salvar",
+    "saved": "Salvo!",
+    "noSaved": "Nenhuma receita salva. Preencha o formulário e clique em Salvar.",
+    "emptyState": "Adicione materiais e preço de venda para ver resultados",
+    "emptyStateHint": "Ponto de equilíbrio, lucro, margem e simulações aparecerão aqui"
+  },
+  "flip": {
+    "details": "Detalhes da revenda",
+    "buyPrice": "Preço de compra (por unidade)",
+    "sellPrice": "Preço de venda (por unidade)",
+    "quantity": "Quantidade",
+    "taxRate": "Taxa de imposto",
+    "regFee": "Taxa de registro (por anúncio)"
+  },
+  "compare": {
+    "title": "Itens para comparar",
+    "addItem": "+ Adicionar item",
+    "itemName": "Nome",
+    "matCost": "Custo mat.",
+    "fee": "Taxa",
+    "salePrice": "Preço venda",
+    "tax": "Imposto %",
+    "profitUnit": "Lucro/unid.",
+    "roi": "ROI %",
+    "margin": "Margem %",
+    "bestRoi": "Melhor ROI: {{name}}",
+    "noProfitable": "Sem itens lucrativos",
+    "perUnit": "/unid."
+  },
+  "results": {
+    "breakEven": "Ponto de equilíbrio",
+    "atLoss": "Atualmente com prejuízo",
+    "matCost": "Custo mat.",
+    "fee": "Taxa",
+    "costUnit": "Custo/unid.",
+    "netProfitTotal": "Lucro líquido (total)",
+    "netProfitUnit": "Lucro líquido (por unidade)",
+    "profitUnit": "Lucro / unid.",
+    "margin": "Margem",
+    "roi": "ROI",
+    "pricingSuggestions": "Sugestões de preço",
+    "targetMargin": "Margem alvo",
+    "suggestedPrice": "Preço sugerido",
+    "netProfit": "Lucro líquido",
+    "priceSimulation": "Simulação de preços",
+    "salePriceCol": "Preço venda",
+    "breakEvenTag": "(equilíbrio)"
+  },
+  "risk": {
+    "low": "Risco baixo",
+    "medium": "Risco médio",
+    "high": "Risco alto"
+  },
+  "gameSelector": {
+    "moreGames": "Mais jogos em breve…"
+  }
+}

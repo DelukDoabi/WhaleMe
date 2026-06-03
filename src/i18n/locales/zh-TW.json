@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "市場利潤計算器"
+  },
+  "footer": {
+    "tagline": "為商人打造，由商人設計"
+  },
+  "tabs": {
+    "craft": "製作 / 配方",
+    "flip": "市場轉賣",
+    "compare": "比較器"
+  },
+  "craft": {
+    "itemInfo": "物品資訊",
+    "itemName": "物品名稱（選填）",
+    "itemNamePlaceholder": "例：秘銀鑄錠",
+    "quantityProduced": "製作數量",
+    "materials": "材料",
+    "material": "材料",
+    "unitCost": "單位成本",
+    "qty": "數量",
+    "addMaterial": "+ 新增材料",
+    "marketSettings": "市場設定",
+    "taxRate": "稅率",
+    "regFee": "上架費（每次）",
+    "salePrice": "預估售價",
+    "savedRecipes": "已儲存配方",
+    "new": "+ 新增",
+    "save": "儲存",
+    "saved": "已儲存！",
+    "noSaved": "尚無儲存的配方。填寫表格後點擊儲存。",
+    "emptyState": "輸入材料和售價以查看結果",
+    "emptyStateHint": "損益平衡、利潤、利潤率和模擬將顯示於此"
+  },
+  "flip": {
+    "details": "轉賣詳情",
+    "buyPrice": "買入價格（每單位）",
+    "sellPrice": "賣出價格（每單位）",
+    "quantity": "數量",
+    "taxRate": "稅率",
+    "regFee": "上架費（每次）"
+  },
+  "compare": {
+    "title": "比較物品",
+    "addItem": "+ 新增物品",
+    "itemName": "物品名稱",
+    "matCost": "材料成本",
+    "fee": "費用",
+    "salePrice": "售價",
+    "tax": "稅率 %",
+    "profitUnit": "每單位利潤",
+    "roi": "ROI %",
+    "margin": "利潤率 %",
+    "bestRoi": "最佳ROI：{{name}}",
+    "noProfitable": "無可獲利物品",
+    "perUnit": "/單位"
+  },
+  "results": {
+    "breakEven": "損益平衡價格",
+    "atLoss": "目前虧損中",
+    "matCost": "材料成本",
+    "fee": "費用",
+    "costUnit": "成本/單位",
+    "netProfitTotal": "淨利潤（合計）",
+    "netProfitUnit": "淨利潤（每單位）",
+    "profitUnit": "利潤 / 單位",
+    "margin": "利潤率",
+    "roi": "ROI",
+    "pricingSuggestions": "定價建議",
+    "targetMargin": "目標利潤率",
+    "suggestedPrice": "建議價格",
+    "netProfit": "淨利潤",
+    "priceSimulation": "價格模擬",
+    "salePriceCol": "售價",
+    "breakEvenTag": "（平衡點）"
+  },
+  "risk": {
+    "low": "低風險",
+    "medium": "中風險",
+    "high": "高風險"
+  },
+  "gameSelector": {
+    "moreGames": "更多遊戲即將推出…"
+  }
+}

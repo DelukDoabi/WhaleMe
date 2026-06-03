@@ -1,0 +1,85 @@
+{
+  "header": {
+    "subtitle": "Market Profit Calculator"
+  },
+  "footer": {
+    "tagline": "Made for traders, by traders"
+  },
+  "tabs": {
+    "craft": "Craft / Recipe",
+    "flip": "Market Flip",
+    "compare": "Comparator"
+  },
+  "craft": {
+    "itemInfo": "Item info",
+    "itemName": "Item name (optional)",
+    "itemNamePlaceholder": "e.g. Orichalcum Ingot",
+    "quantityProduced": "Quantity produced",
+    "materials": "Materials",
+    "material": "Material",
+    "unitCost": "Unit cost",
+    "qty": "Qty",
+    "addMaterial": "+ Add material",
+    "marketSettings": "Market settings",
+    "taxRate": "Tax rate",
+    "regFee": "Registration fee (per listing)",
+    "salePrice": "Estimated sale price",
+    "savedRecipes": "Saved recipes",
+    "new": "+ New",
+    "save": "Save",
+    "saved": "Saved!",
+    "noSaved": "No saved recipes yet. Fill the form and click Save.",
+    "emptyState": "Add your materials and sale price to see results",
+    "emptyStateHint": "Break-even, profit, margin and simulations will appear here"
+  },
+  "flip": {
+    "details": "Flip details",
+    "buyPrice": "Buy price (per unit)",
+    "sellPrice": "Sell price (per unit)",
+    "quantity": "Quantity",
+    "taxRate": "Tax rate",
+    "regFee": "Registration fee (per listing)"
+  },
+  "compare": {
+    "title": "Items to compare",
+    "addItem": "+ Add item",
+    "itemName": "Item name",
+    "matCost": "Mat cost",
+    "fee": "Fee",
+    "salePrice": "Sale price",
+    "tax": "Tax %",
+    "profitUnit": "Profit/unit",
+    "roi": "ROI %",
+    "margin": "Margin %",
+    "bestRoi": "Best ROI: {{name}}",
+    "noProfitable": "No profitable items",
+    "perUnit": "/unit"
+  },
+  "results": {
+    "breakEven": "Break-even price",
+    "atLoss": "Currently at a loss",
+    "matCost": "Mat cost",
+    "fee": "Fee",
+    "costUnit": "Cost/unit",
+    "netProfitTotal": "Net profit (total)",
+    "netProfitUnit": "Net profit (per unit)",
+    "profitUnit": "Profit / unit",
+    "margin": "Margin",
+    "roi": "ROI",
+    "pricingSuggestions": "Pricing suggestions",
+    "targetMargin": "Target margin",
+    "suggestedPrice": "Suggested price",
+    "netProfit": "Net profit",
+    "priceSimulation": "Price simulation",
+    "salePriceCol": "Sale price",
+    "breakEvenTag": "(break-even)"
+  },
+  "risk": {
+    "low": "Low risk",
+    "medium": "Medium risk",
+    "high": "High risk"
+  },
+  "gameSelector": {
+    "moreGames": "More games coming soon…"
+  }
+}

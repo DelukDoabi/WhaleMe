@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import * as calc from '../lib/formulas'
 import { fmtKinah, fmtPct } from '../lib/formatters'
 import MetricCard from './ui/MetricCard'
@@ -12,6 +13,7 @@ const defaultMaterials = [
 ]
 
 export default function CraftCalculator({ game }) {
+  const { t } = useTranslation()
   const { gameCrafts, saveCraft, deleteCraft } = useSavedCrafts(game?.id ?? 'aion2')
 
   const [currentCraftId, setCurrentCraftId] = useState(null)
@@ -123,11 +125,11 @@ export default function CraftCalculator({ game }) {
       {/* Saved Crafts Bar */}
       <div className="card">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">Saved recipes</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">{t('craft.savedRecipes')}</h3>
           <div className="flex gap-2">
-            <button onClick={handleNew} className="btn btn-ghost text-xs">+ New</button>
+            <button onClick={handleNew} className="btn btn-ghost text-xs">{t('craft.new')}</button>
             <button onClick={handleSave} className="btn btn-primary text-xs relative">
-              💾 Save
+              💾 {t('craft.save')}
               <AnimatePresence>
                 {showSaveToast && (
                   <motion.span
@@ -136,7 +138,7 @@ export default function CraftCalculator({ game }) {
                     exit={{ opacity: 0 }}
                     className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] text-emerald-400 whitespace-nowrap"
                   >
-                    ✓ Saved!
+                    ✓ {t('craft.saved')}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -145,7 +147,7 @@ export default function CraftCalculator({ game }) {
         </div>
 
         {gameCrafts.length === 0 ? (
-          <p className="text-xs text-slate-600 italic">No saved recipes yet. Fill the form and click Save.</p>
+          <p className="text-xs text-slate-600 italic">{t('craft.noSaved')}</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {gameCrafts.map(craft => (
@@ -179,20 +181,20 @@ export default function CraftCalculator({ game }) {
       {/* LEFT — Inputs */}
       <div className="space-y-5">
         <div className="card">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">Item info</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">{t('craft.itemInfo')}</h3>
           <div className="space-y-3">
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Item name (optional)</label>
+              <label className="text-xs text-slate-400 block mb-1">{t('craft.itemName')}</label>
               <input
                 type="text"
                 className="input-field"
-                placeholder="e.g. Orichalcum Ingot"
+                placeholder={t('craft.itemNamePlaceholder')}
                 value={itemName}
                 onChange={e => setItemName(e.target.value)}
               />
             </div>
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Quantity produced</label>
+              <label className="text-xs text-slate-400 block mb-1">{t('craft.quantityProduced')}</label>
               <input
                 type="number"
                 className="input-field"
@@ -205,13 +207,13 @@ export default function CraftCalculator({ game }) {
         </div>
 
         <div className="card">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">Materials</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">{t('craft.materials')}</h3>
           <div className="space-y-2">
             {/* Header */}
             <div className="grid grid-cols-[1fr_80px_80px_32px] gap-2 text-[10px] uppercase text-slate-500 tracking-wide px-1">
-              <span>Material</span>
-              <span>Unit cost</span>
-              <span>Qty</span>
+              <span>{t('craft.material')}</span>
+              <span>{t('craft.unitCost')}</span>
+              <span>{t('craft.qty')}</span>
               <span></span>
             </div>
             {/* Rows */}
@@ -257,23 +259,23 @@ export default function CraftCalculator({ game }) {
             </AnimatePresence>
           </div>
           <button onClick={addMaterial} className="btn btn-ghost text-xs mt-3">
-            + Add material
+            {t('craft.addMaterial')}
           </button>
         </div>
 
         <div className="card">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">Market settings</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">{t('craft.marketSettings')}</h3>
           <div className="space-y-4">
             <Slider
               id="tax-rate"
-              label="Tax rate"
+              label={t('craft.taxRate')}
               value={taxRate}
               onChange={setTaxRate}
               min={0}
               max={50}
             />
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Registration fee (per listing)</label>
+              <label className="text-xs text-slate-400 block mb-1">{t('craft.regFee')}</label>
               <input
                 type="number"
                 className="input-field"
@@ -283,7 +285,7 @@ export default function CraftCalculator({ game }) {
               />
             </div>
             <div>
-              <label className="text-xs text-slate-400 block mb-1">Estimated sale price</label>
+              <label className="text-xs text-slate-400 block mb-1">{t('craft.salePrice')}</label>
               <input
                 type="number"
                 className="input-field"
@@ -301,52 +303,52 @@ export default function CraftCalculator({ game }) {
         {!hasInput ? (
           <div className="card flex flex-col items-center justify-center py-12 text-center">
             <span className="text-3xl mb-3">⚒️</span>
-            <p className="text-sm text-slate-400">Add your materials and sale price to see results</p>
-            <p className="text-xs text-slate-600 mt-1">Break-even, profit, margin and simulations will appear here</p>
+            <p className="text-sm text-slate-400">{t('craft.emptyState')}</p>
+            <p className="text-xs text-slate-600 mt-1">{t('craft.emptyStateHint')}</p>
           </div>
         ) : (
         <>
         <BreakEvenBox
           isLoss={results.isLoss}
-          label={results.isLoss ? 'Currently at a loss' : 'Break-even price'}
+          label={results.isLoss ? t('results.atLoss') : t('results.breakEven')}
           price={fmtKinah(results.bep)}
         >
-          <div>Mat cost: <strong className="text-slate-200">{fmtKinah(results.matCost)}</strong></div>
-          <div>Fee: <strong className="text-slate-200">{fmtKinah(results.totalFee)}</strong></div>
-          <div>Cost/unit: <strong className="text-slate-200">{fmtKinah(results.costUnit)}</strong></div>
+          <div>{t('results.matCost')}: <strong className="text-slate-200">{fmtKinah(results.matCost)}</strong></div>
+          <div>{t('results.fee')}: <strong className="text-slate-200">{fmtKinah(results.totalFee)}</strong></div>
+          <div>{t('results.costUnit')}: <strong className="text-slate-200">{fmtKinah(results.costUnit)}</strong></div>
         </BreakEvenBox>
 
         <div className="grid grid-cols-2 gap-3">
           <MetricCard
-            label="Net profit (total)"
+            label={t('results.netProfitTotal')}
             value={salePrice > 0 ? fmtKinah(results.profitTotal) : '—'}
             colorClass={salePrice > 0 ? profitColor(results.profitTotal) : ''}
           />
           <MetricCard
-            label="Net profit (per unit)"
+            label={t('results.netProfitUnit')}
             value={salePrice > 0 ? fmtKinah(results.profitUnit) : '—'}
             colorClass={salePrice > 0 ? profitColor(results.profitUnit) : ''}
           />
           <MetricCard
-            label="Margin"
+            label={t('results.margin')}
             value={salePrice > 0 ? fmtPct(results.marginPct) : '—'}
             colorClass={salePrice > 0 ? profitColor(results.marginPct) : ''}
           />
           <MetricCard
-            label="ROI"
+            label={t('results.roi')}
             value={salePrice > 0 ? fmtPct(results.roiPct) : '—'}
             colorClass={salePrice > 0 ? profitColor(results.roiPct) : ''}
           />
         </div>
 
         <div className="card">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">Pricing suggestions</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">{t('results.pricingSuggestions')}</h3>
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-slate-500 border-b border-slate-700/50">
-                <th className="text-left py-2 font-medium">Target margin</th>
-                <th className="text-left py-2 font-medium">Suggested price</th>
-                <th className="text-left py-2 font-medium">Net profit</th>
+                <th className="text-left py-2 font-medium">{t('results.targetMargin')}</th>
+                <th className="text-left py-2 font-medium">{t('results.suggestedPrice')}</th>
+                <th className="text-left py-2 font-medium">{t('results.netProfit')}</th>
               </tr>
             </thead>
             <tbody>
@@ -368,13 +370,13 @@ export default function CraftCalculator({ game }) {
         </div>
 
         <div className="card">
-          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">Price simulation</h3>
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">{t('results.priceSimulation')}</h3>
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-slate-500 border-b border-slate-700/50">
-                <th className="text-left py-2 font-medium">Sale price</th>
-                <th className="text-left py-2 font-medium">Net profit</th>
-                <th className="text-left py-2 font-medium">Margin %</th>
+                <th className="text-left py-2 font-medium">{t('results.salePriceCol')}</th>
+                <th className="text-left py-2 font-medium">{t('results.netProfit')}</th>
+                <th className="text-left py-2 font-medium">{t('results.margin')} %</th>
               </tr>
             </thead>
             <tbody>
@@ -390,7 +392,7 @@ export default function CraftCalculator({ game }) {
                   >
                     <td className="py-2 text-slate-300">
                       {fmtKinah(s.price)}
-                      {s.isBreakEven && <span className="ml-1.5 text-[10px] text-slate-500">(break-even)</span>}
+                      {s.isBreakEven && <span className="ml-1.5 text-[10px] text-slate-500">{t('results.breakEvenTag')}</span>}
                     </td>
                     <td className={`py-2 font-medium ${cls}`}>{fmtKinah(s.profit)}</td>
                     <td className={`py-2 ${cls}`}>{fmtPct(s.margin)}</td>

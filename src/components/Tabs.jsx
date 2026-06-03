@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 
 const tabs = [
-  { id: 'craft', label: 'Craft / Recipe', icon: '⚒️' },
-  { id: 'flip', label: 'Market Flip', icon: '🔄' },
-  { id: 'compare', label: 'Comparator', icon: '📊' },
+  { id: 'craft', labelKey: 'tabs.craft', icon: '⚒️' },
+  { id: 'flip', labelKey: 'tabs.flip', icon: '🔄' },
+  { id: 'compare', labelKey: 'tabs.compare', icon: '📊' },
 ]
 
 export default function Tabs({ activeTab, onTabChange }) {
+  const { t } = useTranslation()
   return (
     <div className="flex gap-1 border-b border-slate-700/50 mb-6">
       {tabs.map(tab => (
@@ -20,7 +22,7 @@ export default function Tabs({ activeTab, onTabChange }) {
           }`}
         >
           <span className="mr-1.5">{tab.icon}</span>
-          {tab.label}
+          {t(tab.labelKey)}
           {activeTab === tab.id && (
             <motion.div
               layoutId="tab-indicator"

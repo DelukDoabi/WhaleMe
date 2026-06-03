@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import Tabs from './components/Tabs'
 import ThemeToggle from './components/ThemeToggle'
 import GameSelector from './components/GameSelector'
+import LanguageSelector from './components/LanguageSelector'
 import CraftCalculator from './components/CraftCalculator'
 import FlipCalculator from './components/FlipCalculator'
 import Comparator from './components/Comparator'
@@ -15,6 +17,7 @@ const panels = {
 }
 
 export default function App() {
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState('craft')
   const [selectedGame, setSelectedGame] = useState(games[0])
 
@@ -33,6 +36,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-3">
             <GameSelector selectedGame={selectedGame} onGameChange={setSelectedGame} />
+            <LanguageSelector />
             <ThemeToggle />
           </div>
         </div>
@@ -58,7 +62,7 @@ export default function App() {
       {/* Footer */}
       <footer className="border-t border-slate-700/50 mt-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between text-xs text-slate-500">
-          <span>WhaleMe — {selectedGame.name} Market Profit Calculator · Made for traders, by traders</span>
+          <span>WhaleMe — {selectedGame.name} {t('header.subtitle')} · {t('footer.tagline')}</span>
           <span className="font-mono text-[10px] text-slate-600">
             v{__APP_VERSION__}{__COMMIT_SHA__ !== 'dev' ? ` · ${__COMMIT_SHA__.slice(0, 7)}` : ''}
           </span>
