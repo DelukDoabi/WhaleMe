@@ -5,6 +5,7 @@ import { fmtKinah, fmtPct } from '../lib/formatters'
 import MetricCard from './ui/MetricCard'
 import BreakEvenBox from './ui/BreakEvenBox'
 import Slider from './ui/Slider'
+import useSavedCrafts from '../hooks/useSavedCrafts'
 
 const defaultMaterials = [
   { id: 1, name: 'Ore', unitCost: 99, quantity: 2 },
@@ -12,6 +13,9 @@ const defaultMaterials = [
 ]
 
 export default function CraftCalculator({ game }) {
+  const { gameCrafts, saveCraft, deleteCraft } = useSavedCrafts(game?.id ?? 'aion2')
+
+  const [currentCraftId, setCurrentCraftId] = useState(null)
   const [itemName, setItemName] = useState('')
   const [qty, setQty] = useState(1)
   const [materials, setMaterials] = useState(defaultMaterials)
@@ -19,6 +23,7 @@ export default function CraftCalculator({ game }) {
   const [regFee, setRegFee] = useState(game?.defaultRegFee ?? 11)
   const [salePrice, setSalePrice] = useState(800)
   const [nextId, setNextId] = useState(3)
+  const [showSaveToast, setShowSaveToast] = useState(false)
 
   const tax = taxRate / 100
 
@@ -67,7 +72,108 @@ export default function CraftCalculator({ game }) {
 
   const profitColor = (val) => val >= 0 ? 'text-emerald-400' : 'text-rose-400'
 
+  const handleSave = () => {
+    const name = itemName.trim() || 'Unnamed craft'
+    const craft = {
+      id: currentCraftId,
+      name,
+      gameId: game?.id ?? 'aion2',
+      qty,
+      materials,
+      taxRate,
+      regFee,
+      salePrice,
+    }
+    const saved = saveCraft(craft)
+    setCurrentCraftId(saved.id)
+    setShowSaveToast(true)
+    setTimeout(() => setShowSaveToast(false), 2000)
+  }
+
+  const handleLoad = (craft) => {
+    setCurrentCraftId(craft.id)
+    setItemName(craft.name)
+    setQty(craft.qty)
+    setMaterials(craft.materials)
+    setTaxRate(craft.taxRate)
+    setRegFee(craft.regFee)
+    setSalePrice(craft.salePrice)
+    setNextId(Math.max(...craft.materials.map(m => m.id)) + 1)
+  }
+
+  const handleNew = () => {
+    setCurrentCraftId(null)
+    setItemName('')
+    setQty(1)
+    setMaterials(defaultMaterials)
+    setTaxRate(game?.defaultTaxRate ?? 20)
+    setRegFee(game?.defaultRegFee ?? 11)
+    setSalePrice(800)
+    setNextId(3)
+  }
+
+  const handleDelete = (id) => {
+    deleteCraft(id)
+    if (currentCraftId === id) handleNew()
+  }
+
   return (
+    <div className="space-y-5">
+      {/* Saved Crafts Bar */}
+      <div className="card">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">Saved recipes</h3>
+          <div className="flex gap-2">
+            <button onClick={handleNew} className="btn btn-ghost text-xs">+ New</button>
+            <button onClick={handleSave} className="btn btn-primary text-xs relative">
+              💾 Save
+              <AnimatePresence>
+                {showSaveToast && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: -24 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] text-emerald-400 whitespace-nowrap"
+                  >
+                    ✓ Saved!
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
+        </div>
+
+        {gameCrafts.length === 0 ? (
+          <p className="text-xs text-slate-600 italic">No saved recipes yet. Fill the form and click Save.</p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {gameCrafts.map(craft => (
+              <div
+                key={craft.id}
+                className={`group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs cursor-pointer transition-all border
+                  ${craft.id === currentCraftId
+                    ? 'bg-violet-500/15 border-violet-500/40 text-violet-300'
+                    : 'bg-slate-800/60 border-slate-700/40 text-slate-400 hover:border-slate-600 hover:text-slate-200'
+                  }`}
+              >
+                <span onClick={() => handleLoad(craft)} className="truncate max-w-[120px]">
+                  {craft.name}
+                </span>
+                <span className="text-[9px] text-slate-600 hidden sm:inline">
+                  {new Date(craft.updatedAt).toLocaleDateString()}
+                </span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleDelete(craft.id) }}
+                  className="ml-1 text-slate-600 hover:text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* LEFT — Inputs */}
       <div className="space-y-5">
@@ -286,6 +392,7 @@ export default function CraftCalculator({ game }) {
           </table>
         </div>
       </div>
+    </div>
     </div>
   )
 }
