@@ -63,6 +63,7 @@
     "matCost": "Custo mat.",
     "fee": "Taxa",
     "costUnit": "Custo/unid.",
+    "netRevenue": "Receita líquida",
     "netProfitTotal": "Lucro líquido (total)",
     "netProfitUnit": "Lucro líquido (por unidade)",
     "profitUnit": "Lucro / unid.",

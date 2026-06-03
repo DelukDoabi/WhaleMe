@@ -63,6 +63,7 @@
     "matCost": "材料成本",
     "fee": "費用",
     "costUnit": "成本/單位",
+    "netRevenue": "實際收入",
     "netProfitTotal": "淨利潤（合計）",
     "netProfitUnit": "淨利潤（每單位）",
     "profitUnit": "利潤 / 單位",

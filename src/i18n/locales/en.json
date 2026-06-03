@@ -63,6 +63,7 @@
     "matCost": "Mat cost",
     "fee": "Fee",
     "costUnit": "Cost/unit",
+    "netRevenue": "Net received",
     "netProfitTotal": "Net profit (total)",
     "netProfitUnit": "Net profit (per unit)",
     "profitUnit": "Profit / unit",

@@ -63,6 +63,7 @@
     "matCost": "Mat.-Kosten",
     "fee": "Gebühr",
     "costUnit": "Kosten/Stk.",
+    "netRevenue": "Nettoeinnahmen",
     "netProfitTotal": "Nettogewinn (gesamt)",
     "netProfitUnit": "Nettogewinn (pro Stück)",
     "profitUnit": "Gewinn / Stk.",

@@ -57,7 +57,8 @@ export default function CraftCalculator({ game }) {
       return { price: p, profit: pu, margin: mg, isBreakEven: p === basePrice }
     })
 
-    return { matCost, totalFee, cost, costUnit, bep, profitUnit, profitTotal, marginPct, roiPct, isLoss, suggestions, simulation, actualQty }
+    const netRevTotal = netRev * actualQty
+    return { matCost, totalFee, cost, costUnit, bep, netRevTotal, profitUnit, profitTotal, marginPct, roiPct, isLoss, suggestions, simulation, actualQty }
   }, [materials, qty, successRate, taxRate, regFee, salePrice, tax])
 
   const addMaterial = () => {
@@ -334,6 +335,7 @@ export default function CraftCalculator({ game }) {
           <div>{t('results.matCost')}: <strong className="text-slate-200">{fmtKinah(results.matCost)}</strong></div>
           <div>{t('results.fee')}: <strong className="text-slate-200">{fmtKinah(results.totalFee)}</strong></div>
           <div>{t('results.costUnit')}: <strong className="text-slate-200">{fmtKinah(results.costUnit)}</strong></div>
+          {salePrice > 0 && <div>{t('results.netRevenue')}: <strong className="text-emerald-400">{fmtKinah(results.netRevTotal)}</strong></div>}
         </BreakEvenBox>
 
         <div className="grid grid-cols-2 gap-3">

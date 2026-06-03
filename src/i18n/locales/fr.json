@@ -63,6 +63,7 @@
     "matCost": "Coût mat.",
     "fee": "Frais",
     "costUnit": "Coût/unité",
+    "netRevenue": "Revenu net perçu",
     "netProfitTotal": "Profit net (total)",
     "netProfitUnit": "Profit net (par unité)",
     "profitUnit": "Profit / unité",

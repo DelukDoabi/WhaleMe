@@ -63,6 +63,7 @@
     "matCost": "재료비",
     "fee": "수수료",
     "costUnit": "단가",
+    "netRevenue": "실수령액",
     "netProfitTotal": "순이익 (합계)",
     "netProfitUnit": "순이익 (단위당)",
     "profitUnit": "이익 / 단위",
