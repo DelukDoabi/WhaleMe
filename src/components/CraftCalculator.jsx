@@ -19,6 +19,7 @@ export default function CraftCalculator({ game }) {
   const [currentCraftId, setCurrentCraftId] = useState(null)
   const [itemName, setItemName] = useState('')
   const [qty, setQty] = useState(1)
+  const [successRate, setSuccessRate] = useState(100)
   const [materials, setMaterials] = useState(defaultMaterials)
   const [taxRate, setTaxRate] = useState(game?.defaultTaxRate ?? 20)
   const [regFee, setRegFee] = useState(game?.defaultRegFee ?? 11)
@@ -29,14 +30,15 @@ export default function CraftCalculator({ game }) {
   const tax = taxRate / 100
 
   const results = useMemo(() => {
+    const actualQty = Math.max(1, Math.round(qty * successRate / 100))
     const matCost = calc.materialCost(materials)
-    const totalFee = regFee * qty
+    const totalFee = regFee * actualQty
     const cost = calc.totalCost(matCost, totalFee)
-    const costUnit = cost / qty
+    const costUnit = cost / actualQty
     const bep = calc.breakEvenPrice(costUnit, tax)
     const netRev = calc.netRevenue(salePrice, tax)
     const profitUnit = netRev - costUnit
-    const profitTotal = profitUnit * qty
+    const profitTotal = profitUnit * actualQty
     const marginPct = calc.margin(profitTotal, cost)
     const roiPct = calc.roi(profitTotal, cost)
     const isLoss = salePrice > 0 && profitTotal < 0
@@ -55,8 +57,8 @@ export default function CraftCalculator({ game }) {
       return { price: p, profit: pu, margin: mg, isBreakEven: p === basePrice }
     })
 
-    return { matCost, totalFee, cost, costUnit, bep, profitUnit, profitTotal, marginPct, roiPct, isLoss, suggestions, simulation }
-  }, [materials, qty, taxRate, regFee, salePrice, tax])
+    return { matCost, totalFee, cost, costUnit, bep, profitUnit, profitTotal, marginPct, roiPct, isLoss, suggestions, simulation, actualQty }
+  }, [materials, qty, successRate, taxRate, regFee, salePrice, tax])
 
   const addMaterial = () => {
     setMaterials([...materials, { id: nextId, name: '', unitCost: 0, quantity: 1 }])
@@ -82,6 +84,7 @@ export default function CraftCalculator({ game }) {
       name,
       gameId: game?.id ?? 'aion2',
       qty,
+      successRate,
       materials,
       taxRate,
       regFee,
@@ -97,6 +100,7 @@ export default function CraftCalculator({ game }) {
     setCurrentCraftId(craft.id)
     setItemName(craft.name)
     setQty(craft.qty)
+    setSuccessRate(craft.successRate ?? 100)
     setMaterials(craft.materials)
     setTaxRate(craft.taxRate)
     setRegFee(craft.regFee)
@@ -108,6 +112,7 @@ export default function CraftCalculator({ game }) {
     setCurrentCraftId(null)
     setItemName('')
     setQty(1)
+    setSuccessRate(100)
     setMaterials(defaultMaterials)
     setTaxRate(game?.defaultTaxRate ?? 20)
     setRegFee(game?.defaultRegFee ?? 11)
@@ -194,7 +199,7 @@ export default function CraftCalculator({ game }) {
               />
             </div>
             <div>
-              <label className="text-xs text-slate-400 block mb-1">{t('craft.quantityProduced')}</label>
+              <label className="text-xs text-slate-400 block mb-1">{t('craft.craftAttempts')}</label>
               <input
                 type="number"
                 className="input-field"
@@ -203,6 +208,19 @@ export default function CraftCalculator({ game }) {
                 onChange={e => setQty(Math.max(1, parseInt(e.target.value) || 1))}
               />
             </div>
+            <Slider
+              id="success-rate"
+              label={t('craft.successRate')}
+              value={successRate}
+              onChange={setSuccessRate}
+              min={1}
+              max={100}
+            />
+            {successRate < 100 && (
+              <div className="text-xs text-amber-400/80 bg-amber-500/10 rounded-lg px-3 py-2">
+                {t('craft.yieldInfo', { attempted: qty, produced: results.actualQty })}
+              </div>
+            )}
           </div>
         </div>
 
