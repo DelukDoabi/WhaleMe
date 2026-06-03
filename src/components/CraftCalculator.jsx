@@ -8,8 +8,7 @@ import Slider from './ui/Slider'
 import useSavedCrafts from '../hooks/useSavedCrafts'
 
 const defaultMaterials = [
-  { id: 1, name: 'Ore', unitCost: 99, quantity: 2 },
-  { id: 2, name: 'Solvent', unitCost: 400, quantity: 1 },
+  { id: 1, name: '', unitCost: 0, quantity: 1 },
 ]
 
 export default function CraftCalculator({ game }) {
@@ -21,8 +20,8 @@ export default function CraftCalculator({ game }) {
   const [materials, setMaterials] = useState(defaultMaterials)
   const [taxRate, setTaxRate] = useState(game?.defaultTaxRate ?? 20)
   const [regFee, setRegFee] = useState(game?.defaultRegFee ?? 11)
-  const [salePrice, setSalePrice] = useState(800)
-  const [nextId, setNextId] = useState(3)
+  const [salePrice, setSalePrice] = useState(0)
+  const [nextId, setNextId] = useState(2)
   const [showSaveToast, setShowSaveToast] = useState(false)
 
   const tax = taxRate / 100
@@ -58,7 +57,7 @@ export default function CraftCalculator({ game }) {
   }, [materials, qty, taxRate, regFee, salePrice, tax])
 
   const addMaterial = () => {
-    setMaterials([...materials, { id: nextId, name: '', unitCost: 100, quantity: 1 }])
+    setMaterials([...materials, { id: nextId, name: '', unitCost: 0, quantity: 1 }])
     setNextId(nextId + 1)
   }
 
@@ -71,6 +70,8 @@ export default function CraftCalculator({ game }) {
   }
 
   const profitColor = (val) => val >= 0 ? 'text-emerald-400' : 'text-rose-400'
+
+  const hasInput = results.matCost > 0 || salePrice > 0
 
   const handleSave = () => {
     const name = itemName.trim() || 'Unnamed craft'
@@ -108,8 +109,8 @@ export default function CraftCalculator({ game }) {
     setMaterials(defaultMaterials)
     setTaxRate(game?.defaultTaxRate ?? 20)
     setRegFee(game?.defaultRegFee ?? 11)
-    setSalePrice(800)
-    setNextId(3)
+    setSalePrice(0)
+    setNextId(2)
   }
 
   const handleDelete = (id) => {
@@ -297,6 +298,14 @@ export default function CraftCalculator({ game }) {
 
       {/* RIGHT — Results */}
       <div className="space-y-5">
+        {!hasInput ? (
+          <div className="card flex flex-col items-center justify-center py-12 text-center">
+            <span className="text-3xl mb-3">⚒️</span>
+            <p className="text-sm text-slate-400">Add your materials and sale price to see results</p>
+            <p className="text-xs text-slate-600 mt-1">Break-even, profit, margin and simulations will appear here</p>
+          </div>
+        ) : (
+        <>
         <BreakEvenBox
           isLoss={results.isLoss}
           label={results.isLoss ? 'Currently at a loss' : 'Break-even price'}
@@ -391,6 +400,8 @@ export default function CraftCalculator({ game }) {
             </tbody>
           </table>
         </div>
+        </>
+        )}
       </div>
     </div>
     </div>
