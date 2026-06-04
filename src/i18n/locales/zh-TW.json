@@ -20,7 +20,7 @@
     "craftAttempts": "製作次數",
     "successRate": "成功率",
     "yieldInfo": "{{attempted}} 次嘗試 → {{produced}} 個成品",
-    "materials": "材料",
+    "materials": "材料（每次製作）",
     "material": "材料",
     "unitCost": "單位成本",
     "qty": "數量",

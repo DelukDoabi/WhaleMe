@@ -20,7 +20,7 @@
     "craftAttempts": "Herstellungsversuche",
     "successRate": "Erfolgsrate",
     "yieldInfo": "{{attempted}} Versuche → {{produced}} hergestellt",
-    "materials": "Materialien",
+    "materials": "Materialien (pro Herstellung)",
     "material": "Material",
     "unitCost": "Stückkosten",
     "qty": "Anz.",

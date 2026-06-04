@@ -20,7 +20,7 @@
     "craftAttempts": "Craft attempts",
     "successRate": "Success rate",
     "yieldInfo": "{{attempted}} attempts → {{produced}} produced",
-    "materials": "Materials",
+    "materials": "Materials (per craft)",
     "material": "Material",
     "unitCost": "Unit cost",
     "qty": "Qty",

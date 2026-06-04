@@ -30,13 +30,14 @@ export default function CraftCalculator({ game }) {
   const tax = taxRate / 100
 
   const results = useMemo(() => {
-    const actualQty = Math.max(1, Math.round(qty * successRate / 100))
-    const matCost = calc.materialCost(materials)
-    const totalFee = regFee * actualQty
+    const actualQty = Math.max(1, Math.round((qty || 1) * successRate / 100))
+    const matCostPerCraft = calc.materialCost(materials)
+    const matCost = matCostPerCraft * (qty || 1)
+    const totalFee = (regFee || 0) * actualQty
     const cost = calc.totalCost(matCost, totalFee)
     const costUnit = cost / actualQty
     const bep = calc.breakEvenPrice(costUnit, tax)
-    const netRev = calc.netRevenue(salePrice, tax)
+    const netRev = calc.netRevenue(salePrice || 0, tax)
     const profitUnit = netRev - costUnit
     const profitTotal = profitUnit * actualQty
     const marginPct = calc.margin(profitTotal, cost)
@@ -206,7 +207,7 @@ export default function CraftCalculator({ game }) {
                 className="input-field"
                 value={qty}
                 min={1}
-                onChange={e => setQty(Math.max(1, parseInt(e.target.value) || 1))}
+                onChange={e => setQty(e.target.value === '' ? '' : Math.max(1, parseInt(e.target.value) || 1))}
               />
             </div>
             <Slider
@@ -258,14 +259,14 @@ export default function CraftCalculator({ game }) {
                     className="input-field text-xs"
                     value={mat.unitCost}
                     min={0}
-                    onChange={e => updateMaterial(mat.id, 'unitCost', Number(e.target.value))}
+                    onChange={e => updateMaterial(mat.id, 'unitCost', e.target.value === '' ? '' : Number(e.target.value))}
                   />
                   <input
                     type="number"
                     className="input-field text-xs"
                     value={mat.quantity}
                     min={1}
-                    onChange={e => updateMaterial(mat.id, 'quantity', Math.max(1, Number(e.target.value)))}
+                    onChange={e => updateMaterial(mat.id, 'quantity', e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))}
                   />
                   <button
                     onClick={() => removeMaterial(mat.id)}
@@ -300,7 +301,7 @@ export default function CraftCalculator({ game }) {
                 className="input-field"
                 value={regFee}
                 min={0}
-                onChange={e => setRegFee(Number(e.target.value) || 0)}
+                onChange={e => setRegFee(e.target.value === '' ? '' : Number(e.target.value))}
               />
             </div>
             <div>
@@ -310,7 +311,7 @@ export default function CraftCalculator({ game }) {
                 className="input-field"
                 value={salePrice}
                 min={0}
-                onChange={e => setSalePrice(Number(e.target.value) || 0)}
+                onChange={e => setSalePrice(e.target.value === '' ? '' : Number(e.target.value))}
               />
             </div>
           </div>

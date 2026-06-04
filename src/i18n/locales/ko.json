@@ -20,7 +20,7 @@
     "craftAttempts": "제작 시도",
     "successRate": "성공률",
     "yieldInfo": "{{attempted}}회 시도 → {{produced}}개 생산",
-    "materials": "재료",
+    "materials": "재료 (1회 제작)",
     "material": "재료",
     "unitCost": "단가",
     "qty": "수량",
