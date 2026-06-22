@@ -9,12 +9,14 @@ import AuthButton from './components/AuthButton'
 import CraftCalculator from './components/CraftCalculator'
 import FlipCalculator from './components/FlipCalculator'
 import Comparator from './components/Comparator'
+import GearCalculator from './components/GearCalculator'
 import games from './lib/games'
 
 const panels = {
   craft: CraftCalculator,
   flip: FlipCalculator,
   compare: Comparator,
+  gear: GearCalculator,
 }
 
 export default function App() {

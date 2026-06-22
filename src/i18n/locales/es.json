@@ -11,7 +11,8 @@
   "tabs": {
     "craft": "Fabricación / Receta",
     "flip": "Reventa",
-    "compare": "Comparador"
+    "compare": "Comparador",
+    "gear": "Craft Equipo"
   },
   "craft": {
     "itemInfo": "Info del objeto",
@@ -87,5 +88,37 @@
   },
   "gameSelector": {
     "moreGames": "Más juegos próximamente…"
+  },
+  "gear": {
+    "tierConfig": "Precios por tier",
+    "matCost": "Materiales",
+    "regFee": "Cuota ins.",
+    "salePrice": "Precio de venta",
+    "tax": "Impuesto",
+    "taxHint": "10% = mercado local, 20% = mercado mundial",
+    "craftTier": "Tier a craftear",
+    "procHint": "25% de probabilidad fija de proc al tier superior",
+    "targetTier": "Tier objetivo",
+    "mode": { "label": "Modo de análisis", "sellAll": "Vender todo", "chain": "Apuntar a un proc" },
+    "simulate": "Simular",
+    "craftCost": "Coste de craft",
+    "expRevenue": "Ingreso esp.",
+    "expProfit": "Beneficio esp.",
+    "profitable": "✓ Rentable desde el 1er craft",
+    "notProfitable": "✗ Pérdida por craft — revisa los precios",
+    "simulation": "Simulación ({{n}} crafts)",
+    "table": { "crafts": "Crafts", "totalCost": "Coste total", "totalRevenue": "Ingreso esp.", "profit": "Beneficio" },
+    "chainTitle": "Coste para 1 proc {{tier}}",
+    "grossCost": "Coste bruto",
+    "byproducts": "Subproductos",
+    "netCost": "Coste neto",
+    "totalGross": "Inversión bruta",
+    "totalByproduct": "Recuperación subproductos",
+    "netInvestment": "Inversión neta",
+    "saleValue": "valor de venta",
+    "verdict": { "profitable": "Rentable ✓", "loss": "No vale la pena ✗" },
+    "expectedCraftsNote": "Basado en ~{{n}} crafts esperados (25% de proc)",
+    "selectTarget": "Selecciona un tier objetivo para analizar",
+    "contextNote": "Cada craft tiene un 25% de probabilidad de producir el tier superior. Los subproductos (3 de cada 4) se venden para recuperar costes."
   }
 }

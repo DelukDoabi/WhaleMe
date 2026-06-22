@@ -1,0 +1,431 @@
+import { useState, useMemo, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+
+// White → Green → Blue → Yellow → Red
+const TIERS = [
+  { key: 'white',  label: 'Common',  color: 'text-slate-300',  bg: 'bg-slate-500/20',  border: 'border-slate-500/40',  dot: 'bg-slate-400' },
+  { key: 'green',  label: 'Rare',    color: 'text-green-400',  bg: 'bg-green-500/20',  border: 'border-green-500/40',  dot: 'bg-green-400' },
+  { key: 'blue',   label: 'Epic',    color: 'text-blue-400',   bg: 'bg-blue-500/20',   border: 'border-blue-500/40',   dot: 'bg-blue-400' },
+  { key: 'yellow', label: 'Unique',  color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/40', dot: 'bg-yellow-400' },
+  { key: 'red',    label: 'Heroic',  color: 'text-red-400',    bg: 'bg-red-500/20',    border: 'border-red-500/40',    dot: 'bg-red-400' },
+]
+
+const PROC = 0.25            // 25% chance to upgrade
+const EXP_CRAFTS = 1 / PROC  // 4 crafts expected per proc
+
+function fmt(v) {
+  if (v === null || v === undefined || isNaN(v)) return '—'
+  const abs = Math.abs(v)
+  if (abs >= 1_000_000) return `${(v / 1_000_000).toFixed(2)}M Ꝃ`
+  if (abs >= 1_000) return `${(v / 1_000).toFixed(1)}k Ꝃ`
+  return `${Math.round(v).toLocaleString()} Ꝃ`
+}
+
+function pcolor(v) {
+  if (v > 0) return 'text-emerald-400'
+  if (v < 0) return 'text-rose-400'
+  return 'text-slate-400'
+}
+
+function TierPill({ tier, active, onClick, disabled }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all border ${
+        disabled
+          ? 'opacity-30 cursor-not-allowed bg-transparent text-slate-600 border-transparent'
+          : active
+            ? `${tier.bg} ${tier.color} ${tier.border}`
+            : 'bg-transparent text-slate-500 border-transparent hover:text-slate-300 hover:bg-slate-800/40'
+      }`}
+    >
+      <span className={`inline-block w-1.5 h-1.5 rounded-full ${tier.dot} mr-1.5`}></span>
+      {tier.label}
+    </button>
+  )
+}
+
+export default function GearCalculator() {
+  const { t } = useTranslation()
+
+  const [tiers, setTiers] = useState(() =>
+    Object.fromEntries(TIERS.map(t => [t.key, { matCost: '', regFee: '', salePrice: '', taxRate: 20 }]))
+  )
+  const [craftTierKey, setCraftTierKey] = useState('white')
+  const [targetTierKey, setTargetTierKey] = useState('yellow')
+  const [mode, setMode] = useState('chain') // 'sellAll' | 'chain'
+  const [nCrafts, setNCrafts] = useState(20)
+
+  const craftIdx  = TIERS.findIndex(t => t.key === craftTierKey)
+  const targetIdx = TIERS.findIndex(t => t.key === targetTierKey)
+
+  // Auto-adjust target when craft tier changes
+  useEffect(() => {
+    if (targetIdx <= craftIdx) {
+      const next = TIERS[craftIdx + 1]?.key
+      if (next) setTargetTierKey(next)
+    }
+  }, [craftTierKey]) // eslint-disable-line
+
+  const updateTier = (key, field, value) =>
+    setTiers(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }))
+
+  const num     = (key, field) => Number(tiers[key]?.[field]) || 0
+  // Net revenue after selling one item (after tax & reg fee)
+  const netItem = (key) => num(key, 'salePrice') * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
+
+  // ── SELL ALL MODE ─────────────────────────────────────────────────────────
+  const sellAll = useMemo(() => {
+    const nextKey   = TIERS[craftIdx + 1]?.key
+    const cost      = num(craftTierKey, 'matCost')
+    const baseRev   = 0.75 * netItem(craftTierKey)
+    const procRev   = nextKey ? 0.25 * netItem(nextKey) : 0
+    const revPerCraft = baseRev + procRev
+    const profitPerCraft = revPerCraft - cost
+
+    const rows = []
+    const step = Math.max(1, Math.ceil(nCrafts / 10))
+    for (let n = step; n <= nCrafts; n += step) {
+      rows.push({ n, cost: n * cost, rev: n * revPerCraft, profit: n * (revPerCraft - cost) })
+    }
+    if (!rows.length || rows[rows.length - 1].n !== nCrafts) {
+      rows.push({ n: nCrafts, cost: nCrafts * cost, rev: nCrafts * revPerCraft, profit: nCrafts * profitPerCraft })
+    }
+
+    return { cost, revPerCraft, profitPerCraft, rows, nextKey }
+  }, [craftTierKey, tiers, nCrafts, craftIdx]) // eslint-disable-line
+
+  // ── CHAIN MODE ────────────────────────────────────────────────────────────
+  const chain = useMemo(() => {
+    if (targetIdx <= craftIdx) return null
+
+    const stages = []
+    for (let i = craftIdx; i < targetIdx; i++) {
+      const tk  = TIERS[i].key
+      const ptk = TIERS[i + 1].key
+      // Expected: 4 crafts → 3 base byproducts + 1 proc
+      const grossCost     = EXP_CRAFTS * num(tk, 'matCost')
+      const byproductRev  = (EXP_CRAFTS - 1) * netItem(tk)
+      const netCost       = grossCost - byproductRev
+      stages.push({ tier: TIERS[i], procTier: TIERS[i + 1], grossCost, byproductRev, netCost })
+    }
+
+    const totalGross     = stages.reduce((s, st) => s + st.grossCost, 0)
+    const totalByproduct = stages.reduce((s, st) => s + st.byproductRev, 0)
+    const netInvestment  = totalGross - totalByproduct
+    const targetValue    = netItem(targetTierKey)
+    const profit         = targetValue - netInvestment
+    const totalExpCrafts = stages.length * EXP_CRAFTS
+
+    return { stages, totalGross, totalByproduct, netInvestment, targetValue, profit, totalExpCrafts }
+  }, [craftTierKey, targetTierKey, tiers, craftIdx, targetIdx]) // eslint-disable-line
+
+  const craftTier  = TIERS[craftIdx]
+  const targetTier = TIERS[targetIdx]
+
+  return (
+    <div className="space-y-5">
+
+      {/* ── TIER PRICE TABLE ─────────────────────────────────────────────── */}
+      <div className="card">
+        <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-4">{t('gear.tierConfig')}</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="text-[10px] text-slate-500 uppercase tracking-wide">
+                <th className="text-left pb-3 pr-4 font-medium w-24">Tier</th>
+                <th className="text-left pb-3 pr-2 font-medium">{t('gear.matCost')}</th>
+                <th className="text-left pb-3 pr-2 font-medium">{t('gear.regFee')}</th>
+                <th className="text-left pb-3 pr-2 font-medium">{t('gear.salePrice')}</th>
+                <th className="text-left pb-3 font-medium">{t('gear.tax')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TIERS.map(tier => (
+                <tr key={tier.key} className="border-t border-slate-800/40">
+                  <td className="py-2 pr-4">
+                    <span className={`inline-flex items-center gap-1.5 font-medium ${tier.color}`}>
+                      <span className={`w-2 h-2 rounded-full ${tier.dot}`}></span>
+                      {tier.label}
+                    </span>
+                  </td>
+                  <td className="py-2 pr-2">
+                    <input type="number" min={0} placeholder="0"
+                      className="input-field text-xs w-28"
+                      value={tiers[tier.key].matCost}
+                      onChange={e => updateTier(tier.key, 'matCost', e.target.value === '' ? '' : Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="py-2 pr-2">
+                    <input type="number" min={0} placeholder="0"
+                      className="input-field text-xs w-24"
+                      value={tiers[tier.key].regFee}
+                      onChange={e => updateTier(tier.key, 'regFee', e.target.value === '' ? '' : Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="py-2 pr-2">
+                    <input type="number" min={0} placeholder="0"
+                      className="input-field text-xs w-28"
+                      value={tiers[tier.key].salePrice}
+                      onChange={e => updateTier(tier.key, 'salePrice', e.target.value === '' ? '' : Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="py-2">
+                    <div className="flex gap-1">
+                      {[10, 20].map(rate => (
+                        <button key={rate}
+                          onClick={() => updateTier(tier.key, 'taxRate', rate)}
+                          className={`px-1.5 py-0.5 rounded text-[10px] transition-colors ${
+                            tiers[tier.key].taxRate === rate
+                              ? 'bg-violet-600 text-white'
+                              : 'bg-slate-700 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >{rate}%</button>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-[10px] text-slate-600 mt-3">{t('gear.taxHint')}</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {/* ── LEFT: CONTROLS ─────────────────────────────────────────────── */}
+        <div className="space-y-4">
+
+          {/* Craft tier selector */}
+          <div className="card">
+            <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">{t('gear.craftTier')}</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {TIERS.slice(0, 4).map(tier => (
+                <TierPill key={tier.key} tier={tier}
+                  active={craftTierKey === tier.key}
+                  onClick={() => setCraftTierKey(tier.key)}
+                />
+              ))}
+            </div>
+            <p className="text-[10px] text-slate-500 mt-2">{t('gear.procHint')}</p>
+          </div>
+
+          {/* Mode selector */}
+          <div className="card">
+            <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">{t('gear.mode.label')}</h3>
+            <div className="flex gap-2">
+              {['sellAll', 'chain'].map(m => (
+                <button key={m}
+                  onClick={() => setMode(m)}
+                  className={`flex-1 px-3 py-2 rounded-lg text-xs transition-colors ${
+                    mode === m
+                      ? 'bg-violet-600/20 text-violet-300 border border-violet-500/40'
+                      : 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent'
+                  }`}
+                >
+                  {t(`gear.mode.${m}`)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sell-all: craft count slider */}
+          {mode === 'sellAll' && (
+            <div className="card">
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-xs text-slate-400">{t('gear.simulate')}</label>
+                <span className="text-xs text-violet-300 font-medium">{nCrafts} crafts</span>
+              </div>
+              <input type="range" min={4} max={200} step={4}
+                value={nCrafts}
+                onChange={e => setNCrafts(Number(e.target.value))}
+                className="w-full accent-violet-500"
+              />
+            </div>
+          )}
+
+          {/* Chain: target tier selector */}
+          {mode === 'chain' && (
+            <div className="card">
+              <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">{t('gear.targetTier')}</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {TIERS.map((tier, i) => (
+                  <TierPill key={tier.key} tier={tier}
+                    active={targetTierKey === tier.key}
+                    disabled={i <= craftIdx}
+                    onClick={() => setTargetTierKey(tier.key)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Context note */}
+          <div className="card bg-slate-800/30 border border-slate-700/30">
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              {t('gear.contextNote')}
+            </p>
+          </div>
+        </div>
+
+        {/* ── RIGHT: RESULTS ─────────────────────────────────────────────── */}
+        <div className="space-y-4">
+
+          {/* ── SELL ALL MODE ───────────────────────────────────────────── */}
+          {mode === 'sellAll' && (
+            <>
+              {/* Per-craft summary */}
+              <div className="card">
+                <div className="flex items-center gap-2 flex-wrap mb-4">
+                  <span className={`inline-flex items-center gap-1 text-xs font-medium ${craftTier.color}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${craftTier.dot}`}></span>
+                    {craftTier.label}
+                  </span>
+                  <span className="text-slate-600 text-xs">75% →</span>
+                  <span className={`text-xs font-medium ${craftTier.color}`}>{craftTier.label}</span>
+                  <span className="text-slate-600 text-xs ml-2">25% →</span>
+                  {sellAll.nextKey ? (
+                    <span className={`text-xs font-medium ${TIERS[craftIdx + 1].color}`}>
+                      <span className={`inline-block w-1.5 h-1.5 rounded-full ${TIERS[craftIdx + 1].dot} mr-1`}></span>
+                      {TIERS[craftIdx + 1].label}
+                    </span>
+                  ) : <span className="text-xs text-slate-600">—</span>}
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { label: t('gear.craftCost'),   value: fmt(sellAll.cost),         color: 'text-rose-400' },
+                    { label: t('gear.expRevenue'),   value: fmt(sellAll.revPerCraft),  color: 'text-slate-200' },
+                    { label: t('gear.expProfit'),    value: fmt(sellAll.profitPerCraft), color: pcolor(sellAll.profitPerCraft) },
+                  ].map(({ label, value, color }) => (
+                    <div key={label} className="bg-slate-800/40 rounded-lg p-3 text-center">
+                      <div className="text-[10px] text-slate-500 uppercase tracking-wide mb-1">{label}</div>
+                      <div className={`text-sm font-semibold ${color}`}>{value}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className={`mt-3 text-xs px-3 py-2 rounded-lg ${
+                  sellAll.profitPerCraft > 0
+                    ? 'bg-emerald-500/10 text-emerald-400/80'
+                    : 'bg-rose-500/10 text-rose-400/80'
+                }`}>
+                  {sellAll.profitPerCraft > 0 ? t('gear.profitable') : t('gear.notProfitable')}
+                </div>
+              </div>
+
+              {/* Simulation table */}
+              <div className="card">
+                <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
+                  {t('gear.simulation', { n: nCrafts })}
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="text-[10px] text-slate-500 uppercase tracking-wide border-b border-slate-800">
+                        <th className="text-left pb-2 font-medium">{t('gear.table.crafts')}</th>
+                        <th className="text-right pb-2 font-medium">{t('gear.table.totalCost')}</th>
+                        <th className="text-right pb-2 font-medium">{t('gear.table.totalRevenue')}</th>
+                        <th className="text-right pb-2 font-medium">{t('gear.table.profit')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sellAll.rows.map(row => (
+                        <tr key={row.n} className="border-t border-slate-800/50">
+                          <td className="py-1.5 text-slate-300">{row.n}×</td>
+                          <td className="py-1.5 text-right text-rose-400/80">{fmt(row.cost)}</td>
+                          <td className="py-1.5 text-right text-slate-300">{fmt(row.rev)}</td>
+                          <td className={`py-1.5 text-right font-medium ${pcolor(row.profit)}`}>{fmt(row.profit)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ── CHAIN MODE ──────────────────────────────────────────────── */}
+          {mode === 'chain' && chain && (
+            <>
+              {/* Stage breakdown */}
+              <div className="card">
+                <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
+                  {t('gear.chainTitle', { tier: targetTier.label })}
+                </h3>
+                <div className="space-y-2">
+                  {chain.stages.map((stage) => (
+                    <div key={stage.tier.key} className={`rounded-lg p-3 border ${stage.tier.border} ${stage.tier.bg}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-1.5 text-xs">
+                          <span className={`font-medium ${stage.tier.color}`}>{stage.tier.label}</span>
+                          <span className="text-slate-500">→</span>
+                          <span className={`font-medium ${stage.procTier.color}`}>{stage.procTier.label}</span>
+                          <span className="text-slate-500 ml-1">~4 crafts</span>
+                        </div>
+                        <span className={`text-xs font-semibold ${pcolor(-stage.netCost)}`}>
+                          {fmt(stage.netCost)} net
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-[11px]">
+                        <div>
+                          <span className="text-slate-500 block">{t('gear.grossCost')}</span>
+                          <span className="text-rose-400/80">{fmt(stage.grossCost)}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 block">{t('gear.byproducts')}</span>
+                          <span className="text-emerald-400/80">+{fmt(stage.byproductRev)}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 block">{t('gear.netCost')}</span>
+                          <span className={stage.netCost > 0 ? 'text-rose-400' : 'text-emerald-400'}>{fmt(stage.netCost)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Final verdict */}
+              <div className="card">
+                <div className="space-y-0">
+                  {[
+                    { label: t('gear.totalGross'),    value: fmt(chain.totalGross),     color: 'text-rose-400' },
+                    { label: t('gear.totalByproduct'), value: `+${fmt(chain.totalByproduct)}`, color: 'text-emerald-400' },
+                    { label: t('gear.netInvestment'),  value: fmt(chain.netInvestment),  color: 'text-slate-200 font-semibold' },
+                    { label: `${targetTier.label} ${t('gear.saleValue')}`, value: fmt(chain.targetValue), color: `${targetTier.color} font-medium` },
+                  ].map(({ label, value, color }) => (
+                    <div key={label} className="flex justify-between items-center py-2 border-b border-slate-800/50">
+                      <span className="text-xs text-slate-400">{label}</span>
+                      <span className={`text-sm ${color}`}>{value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className={`flex justify-between items-center px-4 py-3 rounded-lg mt-3 border ${
+                  chain.profit > 0
+                    ? 'bg-emerald-500/10 border-emerald-500/20'
+                    : 'bg-rose-500/10 border-rose-500/20'
+                }`}>
+                  <span className={`text-sm font-medium ${chain.profit > 0 ? 'text-emerald-300' : 'text-rose-300'}`}>
+                    {chain.profit > 0 ? t('gear.verdict.profitable') : t('gear.verdict.loss')}
+                  </span>
+                  <span className={`text-lg font-bold ${pcolor(chain.profit)}`}>{fmt(chain.profit)}</span>
+                </div>
+                <p className="text-[10px] text-slate-600 mt-3">
+                  {t('gear.expectedCraftsNote', { n: Math.round(chain.totalExpCrafts) })}
+                </p>
+              </div>
+            </>
+          )}
+
+          {mode === 'chain' && (!chain || targetIdx <= craftIdx) && (
+            <div className="card flex flex-col items-center justify-center py-12 text-center">
+              <span className="text-3xl mb-3">⚔️</span>
+              <p className="text-sm text-slate-400">{t('gear.selectTarget')}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

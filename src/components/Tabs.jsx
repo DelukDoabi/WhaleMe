@@ -5,6 +5,7 @@ const tabs = [
   { id: 'craft', labelKey: 'tabs.craft', icon: '⚒️' },
   { id: 'flip', labelKey: 'tabs.flip', icon: '🔄' },
   { id: 'compare', labelKey: 'tabs.compare', icon: '📊' },
+  { id: 'gear', labelKey: 'tabs.gear', icon: '⚔️' },
 ]
 
 export default function Tabs({ activeTab, onTabChange }) {

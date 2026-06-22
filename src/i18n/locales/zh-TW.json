@@ -11,7 +11,8 @@
   "tabs": {
     "craft": "製作 / 配方",
     "flip": "市場轉賣",
-    "compare": "比較器"
+    "compare": "比較器",
+    "gear": "裝備製作"
   },
   "craft": {
     "itemInfo": "物品資訊",
@@ -87,5 +88,37 @@
   },
   "gameSelector": {
     "moreGames": "更多遊戲即將推出…"
+  },
+  "gear": {
+    "tierConfig": "各階價格",
+    "matCost": "材料",
+    "regFee": "登錄費",
+    "salePrice": "售價",
+    "tax": "稅率",
+    "taxHint": "10% = 地區市場，20% = 全球市場",
+    "craftTier": "製作階級",
+    "procHint": "固定 25% 機率觸發更高階",
+    "targetTier": "目標階級",
+    "mode": { "label": "分析模式", "sellAll": "全部賣出", "chain": "目標觸發" },
+    "simulate": "模擬",
+    "craftCost": "製作成本",
+    "expRevenue": "預期收入",
+    "expProfit": "預期利潤",
+    "profitable": "✓ 從第1次即被利潤",
+    "notProfitable": "✗ 每次製作丧錢—請檢查售價",
+    "simulation": "模擬（{{n}} 次製作）",
+    "table": { "crafts": "製作", "totalCost": "總成本", "totalRevenue": "預期收入", "profit": "利潤" },
+    "chainTitle": "獲得1個 {{tier}} 的成本",
+    "grossCost": "總成本",
+    "byproducts": "副產品",
+    "netCost": "淨成本",
+    "totalGross": "總投資",
+    "totalByproduct": "副產品回收",
+    "netInvestment": "淨投資",
+    "saleValue": "售出價值",
+    "verdict": { "profitable": "盈利 ✓", "loss": "不划算 ✗" },
+    "expectedCraftsNote": "基於 ~{{n}} 次預期製作（25% 觸發率）",
+    "selectTarget": "選擇目標階級進行分析",
+    "contextNote": "每次製作有 25% 機率觸發更高階級裝備。2/4 的副產品會被賣出回收成本。"
   }
 }

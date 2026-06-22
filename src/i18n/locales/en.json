@@ -11,7 +11,8 @@
   "tabs": {
     "craft": "Craft / Recipe",
     "flip": "Market Flip",
-    "compare": "Comparator"
+    "compare": "Comparator",
+    "gear": "Gear Craft"
   },
   "craft": {
     "itemInfo": "Item info",
@@ -87,5 +88,37 @@
   },
   "gameSelector": {
     "moreGames": "More games coming soon…"
+  },
+  "gear": {
+    "tierConfig": "Tier prices",
+    "matCost": "Materials",
+    "regFee": "Reg. fee",
+    "salePrice": "Sale price",
+    "tax": "Tax",
+    "taxHint": "10% = local market, 20% = world market",
+    "craftTier": "Craft tier",
+    "procHint": "25% fixed chance to proc the tier above",
+    "targetTier": "Target tier",
+    "mode": { "label": "Analysis mode", "sellAll": "Sell everything", "chain": "Target a proc" },
+    "simulate": "Simulate",
+    "craftCost": "Craft cost",
+    "expRevenue": "Exp. revenue",
+    "expProfit": "Exp. profit",
+    "profitable": "✓ Profitable from craft #1 (expected value)",
+    "notProfitable": "✗ Losing money per craft — check your sale prices",
+    "simulation": "Simulation ({{n}} crafts)",
+    "table": { "crafts": "Crafts", "totalCost": "Total cost", "totalRevenue": "Exp. revenue", "profit": "Profit" },
+    "chainTitle": "Cost to get 1 {{tier}} proc",
+    "grossCost": "Gross cost",
+    "byproducts": "Byproducts",
+    "netCost": "Net cost",
+    "totalGross": "Gross investment",
+    "totalByproduct": "Byproduct recovery",
+    "netInvestment": "Net investment",
+    "saleValue": "sale value",
+    "verdict": { "profitable": "Profitable ✓", "loss": "Not worth it ✗" },
+    "expectedCraftsNote": "Based on ~{{n}} expected crafts at 25% proc rate",
+    "selectTarget": "Select a target tier to analyse",
+    "contextNote": "Each craft has a 25% chance to produce the tier above. Byproducts (the other 3 out of 4) are sold to recover costs."
   }
 }

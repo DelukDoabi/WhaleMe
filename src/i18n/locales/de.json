@@ -11,7 +11,8 @@
   "tabs": {
     "craft": "Herstellung / Rezept",
     "flip": "Markt-Flip",
-    "compare": "Vergleich"
+    "compare": "Vergleich",
+    "gear": "Ausrüstungs-Craft"
   },
   "craft": {
     "itemInfo": "Gegenstandsinfo",
@@ -87,5 +88,37 @@
   },
   "gameSelector": {
     "moreGames": "Weitere Spiele kommen bald…"
+  },
+  "gear": {
+    "tierConfig": "Preise pro Tier",
+    "matCost": "Materialien",
+    "regFee": "Registr.-Geb.",
+    "salePrice": "Verkaufspreis",
+    "tax": "Steuer",
+    "taxHint": "10% = lokaler Markt, 20% = Weltmarkt",
+    "craftTier": "Craft-Tier",
+    "procHint": "25% feste Chance auf ein Proc des nächsten Tiers",
+    "targetTier": "Ziel-Tier",
+    "mode": { "label": "Analysemodus", "sellAll": "Alles verkaufen", "chain": "Proc anpeilen" },
+    "simulate": "Simulieren",
+    "craftCost": "Craft-Kosten",
+    "expRevenue": "Erw. Einnahmen",
+    "expProfit": "Erw. Gewinn",
+    "profitable": "✓ Profitabel ab Craft #1",
+    "notProfitable": "✗ Verlust pro Craft — Verkaufspreise prüfen",
+    "simulation": "Simulation ({{n}} Crafts)",
+    "table": { "crafts": "Crafts", "totalCost": "Gesamtkosten", "totalRevenue": "Erw. Einnahmen", "profit": "Gewinn" },
+    "chainTitle": "Kosten für 1 {{tier}}-Proc",
+    "grossCost": "Bruttokosten",
+    "byproducts": "Nebenprodukte",
+    "netCost": "Nettokosten",
+    "totalGross": "Bruttoinvestition",
+    "totalByproduct": "Nebenprodukt-Rückgewinnung",
+    "netInvestment": "Nettoinvestition",
+    "saleValue": "Verkaufswert",
+    "verdict": { "profitable": "Profitabel ✓", "loss": "Nicht lohnenswert ✗" },
+    "expectedCraftsNote": "Basiert auf ~{{n}} erwarteten Crafts (25% Proc-Rate)",
+    "selectTarget": "Ziel-Tier auswählen zum Analysieren",
+    "contextNote": "Jeder Craft hat 25% Chance auf ein Proc des nächsten Tiers. Die Nebenprodukte (3 von 4) werden verkauft, um Kosten zu decken."
   }
 }

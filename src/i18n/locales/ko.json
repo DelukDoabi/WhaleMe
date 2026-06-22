@@ -11,7 +11,8 @@
   "tabs": {
     "craft": "제작 / 레시피",
     "flip": "되팔기",
-    "compare": "비교"
+    "compare": "비교",
+    "gear": "장비 제작"
   },
   "craft": {
     "itemInfo": "아이템 정보",
@@ -87,5 +88,37 @@
   },
   "gameSelector": {
     "moreGames": "더 많은 게임이 곧 추가됩니다…"
+  },
+  "gear": {
+    "tierConfig": "티어별 가격",
+    "matCost": "재료",
+    "regFee": "등록 비용",
+    "salePrice": "판매가",
+    "tax": "세율",
+    "taxHint": "10% = 로컈 마켓, 20% = 월드 마켓",
+    "craftTier": "제작 티어",
+    "procHint": "상위 티어 프록 확률 25% 고정",
+    "targetTier": "목표 티어",
+    "mode": { "label": "분석 모드", "sellAll": "전체 판매", "chain": "프록 목표" },
+    "simulate": "시뮬레이션",
+    "craftCost": "제작 비용",
+    "expRevenue": "예상 수익",
+    "expProfit": "예상 이익",
+    "profitable": "✓ 첫 번째 제작부터 수익성",
+    "notProfitable": "✗ 제작당 손해 — 판매가 확인",
+    "simulation": "시뮬레이션 ({{n}}회 제작)",
+    "table": { "crafts": "제작", "totalCost": "총 비용", "totalRevenue": "예상 수익", "profit": "이익" },
+    "chainTitle": "1개 {{tier}} 프록 비용",
+    "grossCost": "총 비용",
+    "byproducts": "부산물",
+    "netCost": "순비용",
+    "totalGross": "총 투자",
+    "totalByproduct": "부산물 회수",
+    "netInvestment": "순 투자",
+    "saleValue": "판매 가치",
+    "verdict": { "profitable": "수익 ✓", "loss": "비효율 ✗" },
+    "expectedCraftsNote": "~{{n}}회 예상 제작 기준 (25% 프록률)",
+    "selectTarget": "목표 티어를 선택하세요",
+    "contextNote": "매 제작마다 25% 확률로 상위 티어 장비를 프록합니다. 부산물(4개 중 3개)은 비용 회수를 위해 판매됩니다."
   }
 }
