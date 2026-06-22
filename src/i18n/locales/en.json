@@ -91,6 +91,9 @@
   },
   "gear": {
     "tierConfig": "Tier prices",
+    "setMaterials": "Set materials",
+    "materialsTitle": "Materials",
+    "materialsTotal": "Total materials cost",
     "matCost": "Materials",
     "regFee": "Reg. fee",
     "salePrice": "Sale price",

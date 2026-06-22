@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 // White → Green → Blue → Yellow → Red
@@ -46,12 +46,80 @@ function TierPill({ tier, active, onClick, disabled }) {
   )
 }
 
+function MaterialsPopup({ tier, tierData, t, onClose, onAdd, onUpdate, onRemove, total }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      {/* Panel */}
+      <div className="relative z-10 w-full max-w-md card border border-slate-600/50 shadow-2xl">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold flex items-center gap-2">
+            <span className={`w-2.5 h-2.5 rounded-full ${tier.dot}`}></span>
+            <span className={tier.color}>{tier.label}</span>
+            <span className="text-slate-400 font-normal text-xs">— {t('gear.materialsTitle')}</span>
+          </h3>
+          <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-200 hover:bg-slate-700/50 transition-colors">✕</button>
+        </div>
+
+        {/* Column headers */}
+        <div className="grid grid-cols-[1fr_90px_60px_28px] gap-2 text-[10px] uppercase text-slate-500 tracking-wide px-1 mb-1">
+          <span>{t('craft.material')}</span>
+          <span>{t('craft.unitCost')}</span>
+          <span>{t('craft.qty')}</span>
+          <span></span>
+        </div>
+
+        {/* Material rows */}
+        <div className="space-y-1.5 mb-3">
+          {tierData.materials.map(mat => (
+            <div key={mat.id} className="grid grid-cols-[1fr_90px_60px_28px] gap-2 items-center">
+              <input type="text" className="input-field text-xs" placeholder={t('craft.material')}
+                value={mat.name}
+                onChange={e => onUpdate(mat.id, 'name', e.target.value)}
+              />
+              <input type="number" className="input-field text-xs" min={0} placeholder="0"
+                value={mat.unitCost}
+                onChange={e => onUpdate(mat.id, 'unitCost', e.target.value === '' ? '' : Number(e.target.value))}
+              />
+              <input type="number" className="input-field text-xs" min={1} placeholder="1"
+                value={mat.qty}
+                onChange={e => onUpdate(mat.id, 'qty', e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))}
+              />
+              <button onClick={() => onRemove(mat.id)}
+                className="w-7 h-7 flex items-center justify-center rounded-md text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors text-xs"
+              >✕</button>
+            </div>
+          ))}
+        </div>
+
+        <button onClick={onAdd} className="btn btn-ghost text-xs w-full mb-4">
+          {t('craft.addMaterial')}
+        </button>
+
+        {/* Total */}
+        <div className="flex items-center justify-between border-t border-slate-700/50 pt-3">
+          <span className="text-xs text-slate-400">{t('gear.materialsTotal')}</span>
+          <span className="text-base font-semibold text-slate-100">{fmt(total)}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function GearCalculator() {
   const { t } = useTranslation()
 
   const [tiers, setTiers] = useState(() =>
-    Object.fromEntries(TIERS.map(t => [t.key, { matCost: '', regFee: '', salePrice: '', taxRate: 20 }]))
+    Object.fromEntries(TIERS.map(t => [t.key, {
+      materials: [{ id: 1, name: '', unitCost: '', qty: 1 }],
+      nextMatId: 2,
+      regFee: '',
+      salePrice: '',
+      taxRate: 20,
+    }]))
   )
+  const [openPopupTier, setOpenPopupTier] = useState(null)
   const [craftTierKey, setCraftTierKey] = useState('white')
   const [targetTierKey, setTargetTierKey] = useState('yellow')
   const [mode, setMode] = useState('chain') // 'sellAll' | 'chain'
@@ -71,6 +139,41 @@ export default function GearCalculator() {
   const updateTier = (key, field, value) =>
     setTiers(prev => ({ ...prev, [key]: { ...prev[key], [field]: value } }))
 
+  const addMaterial = useCallback((tierKey) => {
+    setTiers(prev => ({
+      ...prev,
+      [tierKey]: {
+        ...prev[tierKey],
+        materials: [...prev[tierKey].materials, { id: prev[tierKey].nextMatId, name: '', unitCost: '', qty: 1 }],
+        nextMatId: prev[tierKey].nextMatId + 1,
+      }
+    }))
+  }, [])
+
+  const updateMaterial = useCallback((tierKey, matId, field, value) => {
+    setTiers(prev => ({
+      ...prev,
+      [tierKey]: {
+        ...prev[tierKey],
+        materials: prev[tierKey].materials.map(m => m.id === matId ? { ...m, [field]: value } : m),
+      }
+    }))
+  }, [])
+
+  const removeMaterial = useCallback((tierKey, matId) => {
+    setTiers(prev => ({
+      ...prev,
+      [tierKey]: {
+        ...prev[tierKey],
+        materials: prev[tierKey].materials.filter(m => m.id !== matId),
+      }
+    }))
+  }, [])
+
+  // Computed mat cost from materials list
+  const matCostOf = (key) =>
+    (tiers[key]?.materials || []).reduce((s, m) => s + (Number(m.unitCost) || 0) * (Number(m.qty) || 1), 0)
+
   const num     = (key, field) => Number(tiers[key]?.[field]) || 0
   // Net revenue after selling one item (after tax & reg fee)
   const netItem = (key) => num(key, 'salePrice') * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
@@ -78,7 +181,7 @@ export default function GearCalculator() {
   // ── SELL ALL MODE ─────────────────────────────────────────────────────────
   const sellAll = useMemo(() => {
     const nextKey   = TIERS[craftIdx + 1]?.key
-    const cost      = num(craftTierKey, 'matCost')
+    const cost      = matCostOf(craftTierKey)
     const baseRev   = 0.75 * netItem(craftTierKey)
     const procRev   = nextKey ? 0.25 * netItem(nextKey) : 0
     const revPerCraft = baseRev + procRev
@@ -105,7 +208,7 @@ export default function GearCalculator() {
       const tk  = TIERS[i].key
       const ptk = TIERS[i + 1].key
       // Expected: 4 crafts → 3 base byproducts + 1 proc
-      const grossCost     = EXP_CRAFTS * num(tk, 'matCost')
+      const grossCost     = EXP_CRAFTS * matCostOf(tk)
       const byproductRev  = (EXP_CRAFTS - 1) * netItem(tk)
       const netCost       = grossCost - byproductRev
       stages.push({ tier: TIERS[i], procTier: TIERS[i + 1], grossCost, byproductRev, netCost })
@@ -151,11 +254,24 @@ export default function GearCalculator() {
                     </span>
                   </td>
                   <td className="py-2 pr-2">
-                    <input type="number" min={0} placeholder="0"
-                      className="input-field text-xs w-28"
-                      value={tiers[tier.key].matCost}
-                      onChange={e => updateTier(tier.key, 'matCost', e.target.value === '' ? '' : Number(e.target.value))}
-                    />
+                    <button
+                      onClick={() => setOpenPopupTier(tier.key)}
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs transition-colors min-w-[110px] ${
+                        matCostOf(tier.key) > 0
+                          ? 'bg-slate-700/40 border-slate-600/50 text-slate-200 hover:border-violet-500/50'
+                          : 'bg-slate-800/40 border-slate-700/30 text-slate-500 hover:text-slate-300 hover:border-slate-600'
+                      }`}
+                    >
+                      <span>📦</span>
+                      <span className="flex-1 text-left">
+                        {matCostOf(tier.key) > 0 ? fmt(matCostOf(tier.key)) : t('gear.setMaterials')}
+                      </span>
+                      <span className="text-[10px] text-slate-500">
+                        {tiers[tier.key].materials.filter(m => Number(m.unitCost) > 0).length > 0
+                          ? `${tiers[tier.key].materials.filter(m => Number(m.unitCost) > 0).length}×`
+                          : ''}
+                      </span>
+                    </button>
                   </td>
                   <td className="py-2 pr-2">
                     <input type="number" min={0} placeholder="0"
@@ -426,6 +542,23 @@ export default function GearCalculator() {
           )}
         </div>
       </div>
+
+      {/* Materials popup */}
+      {openPopupTier && (() => {
+        const tier = TIERS.find(t => t.key === openPopupTier)
+        return (
+          <MaterialsPopup
+            tier={tier}
+            tierData={tiers[openPopupTier]}
+            t={t}
+            total={matCostOf(openPopupTier)}
+            onClose={() => setOpenPopupTier(null)}
+            onAdd={() => addMaterial(openPopupTier)}
+            onUpdate={(matId, field, value) => updateMaterial(openPopupTier, matId, field, value)}
+            onRemove={(matId) => removeMaterial(openPopupTier, matId)}
+          />
+        )
+      })()}
     </div>
   )
 }

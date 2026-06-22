@@ -91,6 +91,9 @@
   },
   "gear": {
     "tierConfig": "Precios por tier",
+    "setMaterials": "Configurar materiales",
+    "materialsTitle": "Materiales",
+    "materialsTotal": "Coste total de materiales",
     "matCost": "Materiales",
     "regFee": "Cuota ins.",
     "salePrice": "Precio de venta",

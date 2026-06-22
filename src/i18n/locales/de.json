@@ -91,6 +91,9 @@
   },
   "gear": {
     "tierConfig": "Preise pro Tier",
+    "setMaterials": "Materialien festlegen",
+    "materialsTitle": "Materialien",
+    "materialsTotal": "Materialkosten gesamt",
     "matCost": "Materialien",
     "regFee": "Registr.-Geb.",
     "salePrice": "Verkaufspreis",

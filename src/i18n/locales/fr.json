@@ -90,6 +90,9 @@
     "moreGames": "D'autres jeux arrivent bientôt…"  },
   "gear": {
     "tierConfig": "Prix par tier",
+    "setMaterials": "Définir les matériaux",
+    "materialsTitle": "Matériaux",
+    "materialsTotal": "Coût total des matériaux",
     "matCost": "Matériaux",
     "regFee": "Frais ins.",
     "salePrice": "Prix de vente",

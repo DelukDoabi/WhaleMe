@@ -91,6 +91,9 @@
   },
   "gear": {
     "tierConfig": "各階價格",
+    "setMaterials": "設定材料",
+    "materialsTitle": "材料",
+    "materialsTotal": "材料總成本",
     "matCost": "材料",
     "regFee": "登錄費",
     "salePrice": "售價",

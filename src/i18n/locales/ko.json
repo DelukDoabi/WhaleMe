@@ -91,6 +91,9 @@
   },
   "gear": {
     "tierConfig": "티어별 가격",
+    "setMaterials": "재료 설정",
+    "materialsTitle": "재료",
+    "materialsTotal": "재료 총 비용",
     "matCost": "재료",
     "regFee": "등록 비용",
     "salePrice": "판매가",
