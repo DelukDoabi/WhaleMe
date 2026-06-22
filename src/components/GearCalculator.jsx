@@ -130,6 +130,8 @@ export default function GearCalculator({ game }) {
       regFee: '',
       salePrice: '',
       rawSalePrice: '',
+      rawRegFee: '',
+      rawTaxRate: 20,
       taxRate: 20,
     }]))
   )
@@ -193,6 +195,8 @@ export default function GearCalculator({ game }) {
       regFee: '',
       salePrice: '',
       rawSalePrice: '',
+      rawRegFee: '',
+      rawTaxRate: 20,
       taxRate: 20,
     }]))
 
@@ -248,8 +252,8 @@ export default function GearCalculator({ game }) {
   const num     = (key, field) => Number(tiers[key]?.[field]) || 0
   // Net revenue after selling one finished item (after tax & reg fee)
   const netItem    = (key) => num(key, 'salePrice')    * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
-  // Net revenue after selling one RAW proc item of this tier
-  const netRawSale = (key) => num(key, 'rawSalePrice') * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
+  // Net revenue after selling one RAW proc item of this tier (dedicated fee + tax)
+  const netRawSale = (key) => num(key, 'rawSalePrice') * (1 - num(key, 'rawTaxRate') / 100) - num(key, 'rawRegFee')
   // Best proc revenue: raw sale if priced, otherwise finished item
   const procRev    = (key) => { const r = netRawSale(key); return r > 0 ? r : netItem(key) }
 
@@ -400,6 +404,7 @@ export default function GearCalculator({ game }) {
                 <th className="text-left pb-3 pr-2 font-medium">
                   <span className="flex items-center gap-1">
                     {t('gear.rawPrice')}
+                    <span className="text-slate-600 font-normal">/ {t('gear.rawRegFeeShort')}</span>
                     <span title={t('gear.rawPriceHint')} className="cursor-help text-slate-600 hover:text-slate-400 text-[11px]">ⓘ</span>
                   </span>
                 </th>
@@ -450,11 +455,30 @@ export default function GearCalculator({ game }) {
                     />
                   </td>
                   <td className="py-2 pr-2">
-                    <input type="number" min={0} placeholder="—"
-                      className={`input-field text-xs w-24 ${tiers[tier.key].rawSalePrice ? 'border-amber-500/40 text-amber-300' : ''}`}
-                      value={tiers[tier.key].rawSalePrice}
-                      onChange={e => updateTier(tier.key, 'rawSalePrice', e.target.value === '' ? '' : Number(e.target.value))}
-                    />
+                    <div className="space-y-1">
+                      <input type="number" min={0} placeholder="—"
+                        className={`input-field text-xs w-24 ${tiers[tier.key].rawSalePrice ? 'border-amber-500/40 text-amber-300' : ''}`}
+                        value={tiers[tier.key].rawSalePrice}
+                        onChange={e => updateTier(tier.key, 'rawSalePrice', e.target.value === '' ? '' : Number(e.target.value))}
+                      />
+                      <div className="flex items-center gap-1">
+                        <input type="number" min={0} placeholder={t('gear.regFee').slice(0,3) + '…'}
+                          className="input-field text-[10px] w-14 py-0.5"
+                          value={tiers[tier.key].rawRegFee}
+                          onChange={e => updateTier(tier.key, 'rawRegFee', e.target.value === '' ? '' : Number(e.target.value))}
+                        />
+                        {[10, 20].map(rate => (
+                          <button key={rate}
+                            onClick={() => updateTier(tier.key, 'rawTaxRate', rate)}
+                            className={`px-1 py-0.5 rounded text-[10px] transition-colors ${
+                              tiers[tier.key].rawTaxRate === rate
+                                ? 'bg-amber-600 text-white'
+                                : 'bg-slate-700 text-slate-400 hover:text-slate-200'
+                            }`}
+                          >{rate}%</button>
+                        ))}
+                      </div>
+                    </div>
                   </td>
                   <td className="py-2">
                     <div className="flex gap-1">
