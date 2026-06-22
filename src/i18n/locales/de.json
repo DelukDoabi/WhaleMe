@@ -122,6 +122,12 @@
     "verdict": { "profitable": "Profitabel ✓", "loss": "Nicht lohnenswert ✗" },
     "expectedCraftsNote": "Basiert auf ~{{n}} erwarteten Crafts (25% Proc-Rate)",
     "selectTarget": "Ziel-Tier auswählen zum Analysieren",
-    "contextNote": "Jeder Craft hat 25% Chance auf ein Proc des nächsten Tiers. Die Nebenprodukte (3 von 4) werden verkauft, um Kosten zu decken."
+    "contextNote": "Jeder Craft hat 25% Chance auf ein Proc des nächsten Tiers. Die Nebenprodukte (3 von 4) werden verkauft, um Kosten zu decken.",
+    "savedBuilds": "Gespeicherte Builds",
+    "noSavedBuilds": "Noch keine Builds gespeichert",
+    "newBuild": "Neuer Build",
+    "buildName": "Build-Name…",
+    "save": "Speichern",
+    "unnamedBuild": "Unbenannter Build"
   }
 }

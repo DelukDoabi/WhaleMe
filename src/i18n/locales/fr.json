@@ -121,5 +121,12 @@
     "verdict": { "profitable": "Rentable ✓", "loss": "Pas rentable ✗" },
     "expectedCraftsNote": "Basé sur ~{{n}} crafts attendus (taux de proc 25%)",
     "selectTarget": "Sélectionnez un tier cible pour analyser",
-    "contextNote": "Chaque craft a 25% de chance de produire le tier supérieur. Les sous-produits (les 3 autres sur 4) sont vendus pour récupérer les coûts."  }
+    "contextNote": "Chaque craft a 25% de chance de produire le tier supérieur. Les sous-produits (les 3 autres sur 4) sont vendus pour récupérer les coûts.",
+    "savedBuilds": "Builds sauvegardés",
+    "noSavedBuilds": "Aucun build sauvegardé",
+    "newBuild": "Nouveau build",
+    "buildName": "Nom du build…",
+    "save": "Sauvegarder",
+    "unnamedBuild": "Build sans nom"
+  }
 }

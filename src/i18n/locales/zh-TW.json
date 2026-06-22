@@ -122,6 +122,12 @@
     "verdict": { "profitable": "盈利 ✓", "loss": "不划算 ✗" },
     "expectedCraftsNote": "基於 ~{{n}} 次預期製作（25% 觸發率）",
     "selectTarget": "選擇目標階級進行分析",
-    "contextNote": "每次製作有 25% 機率觸發更高階級裝備。2/4 的副產品會被賣出回收成本。"
+    "contextNote": "每次製作有 25% 機率觸發更高階級裝備。2/4 的副產品會被賣出回收成本。",
+    "savedBuilds": "已儲存的建置",
+    "noSavedBuilds": "尚無已儲存的建置",
+    "newBuild": "新建置",
+    "buildName": "建置名稱…",
+    "save": "儲存",
+    "unnamedBuild": "未命名建置"
   }
 }

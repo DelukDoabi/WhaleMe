@@ -122,6 +122,12 @@
     "verdict": { "profitable": "Profitable ✓", "loss": "Not worth it ✗" },
     "expectedCraftsNote": "Based on ~{{n}} expected crafts at 25% proc rate",
     "selectTarget": "Select a target tier to analyse",
-    "contextNote": "Each craft has a 25% chance to produce the tier above. Byproducts (the other 3 out of 4) are sold to recover costs."
+    "contextNote": "Each craft has a 25% chance to produce the tier above. Byproducts (the other 3 out of 4) are sold to recover costs.",
+    "savedBuilds": "Saved builds",
+    "noSavedBuilds": "No saved builds yet",
+    "newBuild": "New build",
+    "buildName": "Build name…",
+    "save": "Save",
+    "unnamedBuild": "Unnamed build"
   }
 }

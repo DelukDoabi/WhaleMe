@@ -122,6 +122,12 @@
     "verdict": { "profitable": "수익 ✓", "loss": "비효율 ✗" },
     "expectedCraftsNote": "~{{n}}회 예상 제작 기준 (25% 프록률)",
     "selectTarget": "목표 티어를 선택하세요",
-    "contextNote": "매 제작마다 25% 확률로 상위 티어 장비를 프록합니다. 부산물(4개 중 3개)은 비용 회수를 위해 판매됩니다."
+    "contextNote": "매 제작마다 25% 확률로 상위 티어 장비를 프록합니다. 부산물(4개 중 3개)은 비용 회수를 위해 판매됩니다.",
+    "savedBuilds": "저장된 빌드",
+    "noSavedBuilds": "저장된 빌드 없음",
+    "newBuild": "새 빌드",
+    "buildName": "빌드 이름…",
+    "save": "저장",
+    "unnamedBuild": "이름 없는 빌드"
   }
 }

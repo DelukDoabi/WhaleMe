@@ -7,6 +7,8 @@ import MetricCard from './ui/MetricCard'
 import BreakEvenBox from './ui/BreakEvenBox'
 import Slider from './ui/Slider'
 import useSavedCrafts from '../hooks/useSavedCrafts'
+import { useMaterialHistory } from '../contexts/MaterialHistoryContext'
+import MaterialInput from './ui/MaterialInput'
 
 const defaultMaterials = [
   { id: 1, name: '', unitCost: 0, quantity: 1 },
@@ -94,6 +96,7 @@ export default function CraftCalculator({ game }) {
     }
     const saved = saveCraft(craft)
     setCurrentCraftId(saved.id)
+    recordPrices(materials)
     setShowSaveToast(true)
     setTimeout(() => setShowSaveToast(false), 2000)
   }
@@ -247,12 +250,11 @@ export default function CraftCalculator({ game }) {
                   transition={{ duration: 0.2 }}
                   className="grid grid-cols-[1fr_80px_80px_32px] gap-2 items-center"
                 >
-                  <input
-                    type="text"
-                    className="input-field text-xs"
-                    placeholder="Material"
+                  <MaterialInput
                     value={mat.name}
-                    onChange={e => updateMaterial(mat.id, 'name', e.target.value)}
+                    onChange={val => updateMaterial(mat.id, 'name', val)}
+                    onPriceSelect={price => updateMaterial(mat.id, 'unitCost', price)}
+                    placeholder="Material"
                   />
                   <input
                     type="number"

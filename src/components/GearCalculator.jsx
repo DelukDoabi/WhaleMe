@@ -1,5 +1,9 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
+import useSavedCrafts from '../hooks/useSavedCrafts'
+import { useMaterialHistory } from '../contexts/MaterialHistoryContext'
+import MaterialInput from './ui/MaterialInput'
 
 // White → Green → Blue → Yellow → Red
 const TIERS = [
@@ -74,9 +78,11 @@ function MaterialsPopup({ tier, tierData, t, onClose, onAdd, onUpdate, onRemove,
         <div className="space-y-1.5 mb-3">
           {tierData.materials.map(mat => (
             <div key={mat.id} className="grid grid-cols-[1fr_90px_60px_28px] gap-2 items-center">
-              <input type="text" className="input-field text-xs" placeholder={t('craft.material')}
+              <MaterialInput
                 value={mat.name}
-                onChange={e => onUpdate(mat.id, 'name', e.target.value)}
+                onChange={val => onUpdate(mat.id, 'name', val)}
+                onPriceSelect={price => onUpdate(mat.id, 'unitCost', price)}
+                placeholder={t('craft.material')}
               />
               <input type="number" className="input-field text-xs" min={0} placeholder="0"
                 value={mat.unitCost}
@@ -107,8 +113,15 @@ function MaterialsPopup({ tier, tierData, t, onClose, onAdd, onUpdate, onRemove,
   )
 }
 
-export default function GearCalculator() {
+export default function GearCalculator({ game }) {
   const { t } = useTranslation()
+
+  const gearGameId = (game?.id ?? 'aion2') + '_gear'
+  const { gameCrafts, saveCraft, deleteCraft } = useSavedCrafts(gearGameId)
+  const { recordPrices } = useMaterialHistory()
+
+  const [gearCraftName, setGearCraftName] = useState('')
+  const [currentGearCraftId, setCurrentGearCraftId] = useState(null)
 
   const [tiers, setTiers] = useState(() =>
     Object.fromEntries(TIERS.map(t => [t.key, {
@@ -170,6 +183,58 @@ export default function GearCalculator() {
     }))
   }, [])
 
+  // ── SAVE / LOAD HANDLERS ─────────────────────────────────────────────────
+  const defaultTiers = () =>
+    Object.fromEntries(TIERS.map(t => [t.key, {
+      materials: [{ id: 1, name: '', unitCost: '', qty: 1 }],
+      nextMatId: 2,
+      regFee: '',
+      salePrice: '',
+      taxRate: 20,
+    }]))
+
+  const handleSaveGear = () => {
+    const craft = {
+      id: currentGearCraftId,
+      name: gearCraftName.trim() || t('gear.unnamedBuild'),
+      gameId: gearGameId,
+      tiers,
+      craftTierKey,
+      targetTierKey,
+      mode,
+      nCrafts,
+    }
+    const saved = saveCraft(craft)
+    setCurrentGearCraftId(saved.id)
+    const allMaterials = Object.values(tiers).flatMap(t => t.materials || [])
+    recordPrices(allMaterials)
+  }
+
+  const handleLoadGear = (craft) => {
+    setCurrentGearCraftId(craft.id)
+    setGearCraftName(craft.name)
+    setTiers(craft.tiers)
+    setCraftTierKey(craft.craftTierKey ?? 'white')
+    setTargetTierKey(craft.targetTierKey ?? 'yellow')
+    setMode(craft.mode ?? 'chain')
+    setNCrafts(craft.nCrafts ?? 20)
+  }
+
+  const handleNewGear = () => {
+    setCurrentGearCraftId(null)
+    setGearCraftName('')
+    setTiers(defaultTiers())
+    setCraftTierKey('white')
+    setTargetTierKey('yellow')
+    setMode('chain')
+    setNCrafts(20)
+  }
+
+  const handleDeleteGear = (id) => {
+    deleteCraft(id)
+    if (currentGearCraftId === id) handleNewGear()
+  }
+
   // Computed mat cost from materials list
   const matCostOf = (key) =>
     (tiers[key]?.materials || []).reduce((s, m) => s + (Number(m.unitCost) || 0) * (Number(m.qty) || 1), 0)
@@ -229,6 +294,63 @@ export default function GearCalculator() {
 
   return (
     <div className="space-y-5">
+
+      {/* ── SAVED GEAR BUILDS ────────────────────────────────────────────── */}
+      <div className="card">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">{t('gear.savedBuilds')}</h3>
+            {gameCrafts.length > 0 ? (
+              <AnimatePresence>
+                <div className="flex flex-wrap gap-2">
+                  {gameCrafts.map(c => (
+                    <motion.button
+                      key={c.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      onClick={() => handleLoadGear(c)}
+                      className={`group flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all border ${
+                        currentGearCraftId === c.id
+                          ? 'bg-violet-600/20 border-violet-500/50 text-violet-300'
+                          : 'bg-slate-800/40 border-slate-700/30 text-slate-400 hover:border-slate-600 hover:text-slate-200'
+                      }`}
+                    >
+                      <span>{c.name}</span>
+                      <span className="text-[10px] text-slate-600">
+                        {new Date(c.updatedAt ?? c.id).toLocaleDateString()}
+                      </span>
+                      <span
+                        role="button"
+                        onClick={e => { e.stopPropagation(); handleDeleteGear(c.id) }}
+                        className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-rose-400 transition-all ml-0.5"
+                      >✕</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </AnimatePresence>
+            ) : (
+              <p className="text-xs text-slate-600 italic">{t('gear.noSavedBuilds')}</p>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button onClick={handleNewGear} className="btn btn-ghost text-xs whitespace-nowrap">
+              + {t('gear.newBuild')}
+            </button>
+            <input
+              type="text"
+              className="input-field text-xs w-36"
+              placeholder={t('gear.buildName')}
+              value={gearCraftName}
+              onChange={e => setGearCraftName(e.target.value)}
+            />
+            <button onClick={handleSaveGear} className="btn btn-primary text-xs whitespace-nowrap">
+              {t('gear.save')}
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* ── TIER PRICE TABLE ─────────────────────────────────────────────── */}
       <div className="card">
