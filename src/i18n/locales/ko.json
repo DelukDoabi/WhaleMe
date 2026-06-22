@@ -128,6 +128,10 @@
     "newBuild": "새 빌드",
     "buildName": "빌드 이름…",
     "save": "저장",
-    "unnamedBuild": "이름 없는 빌드"
+    "unnamedBuild": "이름 없는 빌드",
+    "trashIntermediates": "중간 결과물 버리기",
+    "trashIntermediatesDesc": "부산물 수익 무시 — 최악의 경우 시나리오",
+    "trashed": "버림",
+    "worstCase": "최악의 경우"
   }
 }

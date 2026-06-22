@@ -137,6 +137,7 @@ export default function GearCalculator({ game }) {
   const [targetTierKey, setTargetTierKey] = useState('yellow')
   const [mode, setMode] = useState('chain') // 'sellAll' | 'chain'
   const [nCrafts, setNCrafts] = useState(20)
+  const [trashIntermediates, setTrashIntermediates] = useState(false)
 
   const craftIdx  = TIERS.findIndex(t => t.key === craftTierKey)
   const targetIdx = TIERS.findIndex(t => t.key === targetTierKey)
@@ -203,6 +204,7 @@ export default function GearCalculator({ game }) {
       targetTierKey,
       mode,
       nCrafts,
+      trashIntermediates,
     }
     const saved = saveCraft(craft)
     setCurrentGearCraftId(saved.id)
@@ -218,6 +220,7 @@ export default function GearCalculator({ game }) {
     setTargetTierKey(craft.targetTierKey ?? 'yellow')
     setMode(craft.mode ?? 'chain')
     setNCrafts(craft.nCrafts ?? 20)
+    setTrashIntermediates(craft.trashIntermediates ?? false)
   }
 
   const handleNewGear = () => {
@@ -228,6 +231,7 @@ export default function GearCalculator({ game }) {
     setTargetTierKey('yellow')
     setMode('chain')
     setNCrafts(20)
+    setTrashIntermediates(false)
   }
 
   const handleDeleteGear = (id) => {
@@ -271,11 +275,10 @@ export default function GearCalculator({ game }) {
     const stages = []
     for (let i = craftIdx; i < targetIdx; i++) {
       const tk  = TIERS[i].key
-      const ptk = TIERS[i + 1].key
       // Expected: 4 crafts → 3 base byproducts + 1 proc
-      const grossCost     = EXP_CRAFTS * matCostOf(tk)
-      const byproductRev  = (EXP_CRAFTS - 1) * netItem(tk)
-      const netCost       = grossCost - byproductRev
+      const grossCost    = EXP_CRAFTS * matCostOf(tk)
+      const byproductRev = trashIntermediates ? 0 : (EXP_CRAFTS - 1) * netItem(tk)
+      const netCost      = grossCost - byproductRev
       stages.push({ tier: TIERS[i], procTier: TIERS[i + 1], grossCost, byproductRev, netCost })
     }
 
@@ -287,7 +290,7 @@ export default function GearCalculator({ game }) {
     const totalExpCrafts = stages.length * EXP_CRAFTS
 
     return { stages, totalGross, totalByproduct, netInvestment, targetValue, profit, totalExpCrafts }
-  }, [craftTierKey, targetTierKey, tiers, craftIdx, targetIdx]) // eslint-disable-line
+  }, [craftTierKey, targetTierKey, tiers, craftIdx, targetIdx, trashIntermediates]) // eslint-disable-line
 
   const craftTier  = TIERS[craftIdx]
   const targetTier = TIERS[targetIdx]
@@ -500,6 +503,33 @@ export default function GearCalculator({ game }) {
             </div>
           )}
 
+          {/* Chain: trash intermediates toggle */}
+          {mode === 'chain' && (
+            <button
+              onClick={() => setTrashIntermediates(v => !v)}
+              className={`w-full card flex items-center justify-between gap-3 text-left transition-colors border ${
+                trashIntermediates
+                  ? 'bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/15'
+                  : 'border-slate-700/30 hover:border-slate-600/50'
+              }`}
+            >
+              <div>
+                <p className={`text-xs font-medium ${trashIntermediates ? 'text-amber-300' : 'text-slate-300'}`}>
+                  🗑️ {t('gear.trashIntermediates')}
+                </p>
+                <p className="text-[11px] text-slate-500 mt-0.5">{t('gear.trashIntermediatesDesc')}</p>
+              </div>
+              {/* Toggle pill */}
+              <div className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
+                trashIntermediates ? 'bg-amber-500' : 'bg-slate-700'
+              }`}>
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                  trashIntermediates ? 'translate-x-6' : 'translate-x-1'
+                }`} />
+              </div>
+            </button>
+          )}
+
           {/* Context note */}
           <div className="card bg-slate-800/30 border border-slate-700/30">
             <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -588,9 +618,16 @@ export default function GearCalculator({ game }) {
             <>
               {/* Stage breakdown */}
               <div className="card">
-                <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-3">
-                  {t('gear.chainTitle', { tier: targetTier.label })}
-                </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xs font-medium uppercase tracking-wider text-slate-500">
+                    {t('gear.chainTitle', { tier: targetTier.label })}
+                  </h3>
+                  {trashIntermediates && (
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                      🗑️ {t('gear.worstCase')}
+                    </span>
+                  )}
+                </div>
                 <div className="space-y-2">
                   {chain.stages.map((stage) => (
                     <div key={stage.tier.key} className={`rounded-lg p-3 border ${stage.tier.border} ${stage.tier.bg}`}>
@@ -612,7 +649,10 @@ export default function GearCalculator({ game }) {
                         </div>
                         <div>
                           <span className="text-slate-500 block">{t('gear.byproducts')}</span>
-                          <span className="text-emerald-400/80">+{fmt(stage.byproductRev)}</span>
+                          {trashIntermediates
+                            ? <span className="text-slate-600 line-through text-[10px]">{t('gear.trashed')}</span>
+                            : <span className="text-emerald-400/80">+{fmt(stage.byproductRev)}</span>
+                          }
                         </div>
                         <div>
                           <span className="text-slate-500 block">{t('gear.netCost')}</span>
@@ -628,9 +668,13 @@ export default function GearCalculator({ game }) {
               <div className="card">
                 <div className="space-y-0">
                   {[
-                    { label: t('gear.totalGross'),    value: fmt(chain.totalGross),     color: 'text-rose-400' },
-                    { label: t('gear.totalByproduct'), value: `+${fmt(chain.totalByproduct)}`, color: 'text-emerald-400' },
-                    { label: t('gear.netInvestment'),  value: fmt(chain.netInvestment),  color: 'text-slate-200 font-semibold' },
+                    { label: t('gear.totalGross'),     value: fmt(chain.totalGross),      color: 'text-rose-400' },
+                    {
+                      label: t('gear.totalByproduct'),
+                      value: trashIntermediates ? `— (${t('gear.trashed')})` : `+${fmt(chain.totalByproduct)}`,
+                      color: trashIntermediates ? 'text-slate-600 line-through' : 'text-emerald-400',
+                    },
+                    { label: t('gear.netInvestment'),  value: fmt(chain.netInvestment),   color: 'text-slate-200 font-semibold' },
                     { label: `${targetTier.label} ${t('gear.saleValue')}`, value: fmt(chain.targetValue), color: `${targetTier.color} font-medium` },
                   ].map(({ label, value, color }) => (
                     <div key={label} className="flex justify-between items-center py-2 border-b border-slate-800/50">

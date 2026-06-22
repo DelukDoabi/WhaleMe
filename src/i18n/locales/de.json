@@ -128,6 +128,10 @@
     "newBuild": "Neuer Build",
     "buildName": "Build-Name…",
     "save": "Speichern",
-    "unnamedBuild": "Unbenannter Build"
+    "unnamedBuild": "Unbenannter Build",
+    "trashIntermediates": "Nebenprodukte wegwerfen",
+    "trashIntermediatesDesc": "Nebenprodukt-Einnahmen ignorieren — schlechtester Fall",
+    "trashed": "weggeworfen",
+    "worstCase": "Schlechtester Fall"
   }
 }

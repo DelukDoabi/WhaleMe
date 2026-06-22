@@ -128,6 +128,10 @@
     "newBuild": "新建置",
     "buildName": "建置名稱…",
     "save": "儲存",
-    "unnamedBuild": "未命名建置"
+    "unnamedBuild": "未命名建置",
+    "trashIntermediates": "捨棄中間產物",
+    "trashIntermediatesDesc": "忽略副產品收益 — 最壞情況",
+    "trashed": "已捨棄",
+    "worstCase": "最壞情況"
   }
 }

@@ -127,6 +127,10 @@
     "newBuild": "Nouveau build",
     "buildName": "Nom du build…",
     "save": "Sauvegarder",
-    "unnamedBuild": "Build sans nom"
+    "unnamedBuild": "Build sans nom",
+    "trashIntermediates": "Jeter les intermédiaires",
+    "trashIntermediatesDesc": "Ignorer les revenus des sous-produits — pire cas possible",
+    "trashed": "jeté",
+    "worstCase": "Pire cas"
   }
 }
