@@ -129,6 +129,7 @@ export default function GearCalculator({ game }) {
       nextMatId: 2,
       regFee: '',
       salePrice: '',
+      rawSalePrice: '',
       taxRate: 20,
     }]))
   )
@@ -191,6 +192,7 @@ export default function GearCalculator({ game }) {
       nextMatId: 2,
       regFee: '',
       salePrice: '',
+      rawSalePrice: '',
       taxRate: 20,
     }]))
 
@@ -244,16 +246,21 @@ export default function GearCalculator({ game }) {
     (tiers[key]?.materials || []).reduce((s, m) => s + (Number(m.unitCost) || 0) * (Number(m.qty) || 1), 0)
 
   const num     = (key, field) => Number(tiers[key]?.[field]) || 0
-  // Net revenue after selling one item (after tax & reg fee)
-  const netItem = (key) => num(key, 'salePrice') * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
+  // Net revenue after selling one finished item (after tax & reg fee)
+  const netItem    = (key) => num(key, 'salePrice')    * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
+  // Net revenue after selling one RAW proc item of this tier
+  const netRawSale = (key) => num(key, 'rawSalePrice') * (1 - num(key, 'taxRate') / 100) - num(key, 'regFee')
+  // Best proc revenue: raw sale if priced, otherwise finished item
+  const procRev    = (key) => { const r = netRawSale(key); return r > 0 ? r : netItem(key) }
 
   // ── SELL ALL MODE ─────────────────────────────────────────────────────────
   const sellAll = useMemo(() => {
     const nextKey   = TIERS[craftIdx + 1]?.key
     const cost      = matCostOf(craftTierKey)
     const baseRev   = 0.75 * netItem(craftTierKey)
-    const procRev   = nextKey ? 0.25 * netItem(nextKey) : 0
-    const revPerCraft = baseRev + procRev
+    // If raw price is set for the next tier, use it (player sells the proc raw); otherwise assume finished
+    const pRev      = nextKey ? 0.25 * procRev(nextKey) : 0
+    const revPerCraft    = baseRev + pRev
     const profitPerCraft = revPerCraft - cost
 
     const rows = []
@@ -265,7 +272,8 @@ export default function GearCalculator({ game }) {
       rows.push({ n: nCrafts, cost: nCrafts * cost, rev: nCrafts * revPerCraft, profit: nCrafts * profitPerCraft })
     }
 
-    return { cost, revPerCraft, profitPerCraft, rows, nextKey }
+    const procUsesRaw = nextKey && netRawSale(nextKey) > 0
+    return { cost, revPerCraft, profitPerCraft, rows, nextKey, procUsesRaw }
   }, [craftTierKey, tiers, nCrafts, craftIdx]) // eslint-disable-line
 
   // ── CHAIN MODE ────────────────────────────────────────────────────────────
@@ -274,12 +282,35 @@ export default function GearCalculator({ game }) {
 
     const stages = []
     for (let i = craftIdx; i < targetIdx; i++) {
-      const tk  = TIERS[i].key
-      // Expected: 4 crafts → 3 base byproducts + 1 proc
+      const tk      = TIERS[i].key
+      const nextKey = TIERS[i + 1].key
+
+      // ── Craft cost / byproduct base ──────────────────────────────────────
+      // Expected: 4 crafts → 3 base byproducts + 1 raw proc of next tier
       const grossCost    = EXP_CRAFTS * matCostOf(tk)
       const byproductRev = trashIntermediates ? 0 : (EXP_CRAFTS - 1) * netItem(tk)
-      const netCost      = grossCost - byproductRev
-      stages.push({ tier: TIERS[i], procTier: TIERS[i + 1], grossCost, byproductRev, netCost })
+      const stageCostNet = grossCost - byproductRev   // net cost to obtain 1 raw of nextKey
+
+      // ── Option A — sell the raw proc ─────────────────────────────────────
+      const rawSaleNet    = netRawSale(nextKey)
+      const rawSellProfit = rawSaleNet - stageCostNet
+      const hasRawPrice   = rawSaleNet > 0
+
+      // ── Option B — craft the raw into a finished item and sell ───────────
+      // (craft one finished nextKey item from the raw, spending matCostOf(nextKey))
+      const craftFinishCost    = matCostOf(nextKey)
+      const craftFinishedValue = netItem(nextKey)
+      const craftImmProfit     = craftFinishedValue - stageCostNet - craftFinishCost
+
+      const rawIsBetter = hasRawPrice && rawSellProfit > craftImmProfit
+
+      stages.push({
+        tier: TIERS[i], procTier: TIERS[i + 1],
+        grossCost, byproductRev, netCost: stageCostNet,
+        rawSaleNet, rawSellProfit, hasRawPrice,
+        craftFinishCost, craftFinishedValue, craftImmProfit,
+        rawIsBetter,
+      })
     }
 
     const totalGross     = stages.reduce((s, st) => s + st.grossCost, 0)
@@ -366,6 +397,12 @@ export default function GearCalculator({ game }) {
                 <th className="text-left pb-3 pr-2 font-medium">{t('gear.matCost')}</th>
                 <th className="text-left pb-3 pr-2 font-medium">{t('gear.regFee')}</th>
                 <th className="text-left pb-3 pr-2 font-medium">{t('gear.salePrice')}</th>
+                <th className="text-left pb-3 pr-2 font-medium">
+                  <span className="flex items-center gap-1">
+                    {t('gear.rawPrice')}
+                    <span title={t('gear.rawPriceHint')} className="cursor-help text-slate-600 hover:text-slate-400 text-[11px]">ⓘ</span>
+                  </span>
+                </th>
                 <th className="text-left pb-3 font-medium">{t('gear.tax')}</th>
               </tr>
             </thead>
@@ -410,6 +447,13 @@ export default function GearCalculator({ game }) {
                       className="input-field text-xs w-28"
                       value={tiers[tier.key].salePrice}
                       onChange={e => updateTier(tier.key, 'salePrice', e.target.value === '' ? '' : Number(e.target.value))}
+                    />
+                  </td>
+                  <td className="py-2 pr-2">
+                    <input type="number" min={0} placeholder="—"
+                      className={`input-field text-xs w-24 ${tiers[tier.key].rawSalePrice ? 'border-amber-500/40 text-amber-300' : ''}`}
+                      value={tiers[tier.key].rawSalePrice}
+                      onChange={e => updateTier(tier.key, 'rawSalePrice', e.target.value === '' ? '' : Number(e.target.value))}
                     />
                   </td>
                   <td className="py-2">
@@ -580,6 +624,11 @@ export default function GearCalculator({ game }) {
                 }`}>
                   {sellAll.profitPerCraft > 0 ? t('gear.profitable') : t('gear.notProfitable')}
                 </div>
+                {sellAll.procUsesRaw && (
+                  <p className="mt-2 text-[10px] text-amber-400/70">
+                    🏷️ {t('gear.procUsingRaw')}
+                  </p>
+                )}
               </div>
 
               {/* Simulation table */}
@@ -631,17 +680,22 @@ export default function GearCalculator({ game }) {
                 <div className="space-y-2">
                   {chain.stages.map((stage) => (
                     <div key={stage.tier.key} className={`rounded-lg p-3 border ${stage.tier.border} ${stage.tier.bg}`}>
+                      {/* Stage header */}
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-1.5 text-xs">
                           <span className={`font-medium ${stage.tier.color}`}>{stage.tier.label}</span>
                           <span className="text-slate-500">→</span>
-                          <span className={`font-medium ${stage.procTier.color}`}>{stage.procTier.label}</span>
+                          <span className={`font-medium ${stage.procTier.color}`}>
+                            {t('gear.rawLabel', { tier: stage.procTier.label })}
+                          </span>
                           <span className="text-slate-500 ml-1">~4 crafts</span>
                         </div>
                         <span className={`text-xs font-semibold ${pcolor(-stage.netCost)}`}>
                           {fmt(stage.netCost)} net
                         </span>
                       </div>
+
+                      {/* Cost breakdown */}
                       <div className="grid grid-cols-3 gap-2 text-[11px]">
                         <div>
                           <span className="text-slate-500 block">{t('gear.grossCost')}</span>
@@ -658,6 +712,68 @@ export default function GearCalculator({ game }) {
                           <span className="text-slate-500 block">{t('gear.netCost')}</span>
                           <span className={stage.netCost > 0 ? 'text-rose-400' : 'text-emerald-400'}>{fmt(stage.netCost)}</span>
                         </div>
+                      </div>
+
+                      {/* ── Decision: Sell Raw vs Craft Finished ─────────── */}
+                      <div className="mt-3 pt-2.5 border-t border-slate-700/40">
+                        <div className="text-[9px] uppercase text-slate-600 tracking-widest mb-2">{t('gear.decision')}</div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {/* Sell Raw */}
+                          <div className={`rounded-lg p-2.5 border transition-all ${
+                            stage.rawIsBetter
+                              ? `${stage.procTier.bg} ${stage.procTier.border}`
+                              : 'bg-slate-800/30 border-slate-700/20 opacity-60'
+                          }`}>
+                            <div className="text-[10px] text-slate-400 mb-1">
+                              🏷️ {t('gear.sellRaw')}
+                            </div>
+                            {stage.hasRawPrice ? (
+                              <>
+                                <div className="text-[10px] text-slate-500">{fmt(stage.rawSaleNet)}</div>
+                                <div className={`text-sm font-bold ${pcolor(stage.rawSellProfit)}`}>
+                                  {fmt(stage.rawSellProfit)}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-[10px] text-slate-600 italic">{t('gear.noRawPrice')}</div>
+                            )}
+                          </div>
+
+                          {/* Craft Finished */}
+                          <div className={`rounded-lg p-2.5 border transition-all ${
+                            !stage.rawIsBetter && stage.craftFinishedValue > 0
+                              ? `${stage.procTier.bg} ${stage.procTier.border}`
+                              : 'bg-slate-800/30 border-slate-700/20 opacity-60'
+                          }`}>
+                            <div className="text-[10px] text-slate-400 mb-1">
+                              ⚒️ {t('gear.craftFinished')}
+                            </div>
+                            {stage.craftFinishedValue > 0 ? (
+                              <>
+                                <div className="text-[10px] text-slate-500">{fmt(stage.craftFinishedValue)}</div>
+                                <div className={`text-sm font-bold ${pcolor(stage.craftImmProfit)}`}>
+                                  {fmt(stage.craftImmProfit)}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-[10px] text-slate-600 italic">{t('gear.noPrice')}</div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Recommendation line */}
+                        {stage.hasRawPrice && stage.craftFinishedValue > 0 && (
+                          <div className={`mt-2 text-[10px] text-center font-medium px-2 py-1 rounded ${
+                            stage.rawIsBetter
+                              ? 'bg-emerald-500/10 text-emerald-400'
+                              : 'bg-violet-500/10 text-violet-400'
+                          }`}>
+                            {stage.rawIsBetter
+                              ? `→ ${t('gear.recommendSellRaw')} (+${fmt(stage.rawSellProfit - stage.craftImmProfit)})`
+                              : `→ ${t('gear.recommendCraft')} (+${fmt(stage.craftImmProfit - stage.rawSellProfit)})`
+                            }
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

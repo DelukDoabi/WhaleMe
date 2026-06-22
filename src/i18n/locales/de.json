@@ -132,6 +132,17 @@
     "trashIntermediates": "Nebenprodukte wegwerfen",
     "trashIntermediatesDesc": "Nebenprodukt-Einnahmen ignorieren — schlechtester Fall",
     "trashed": "weggeworfen",
-    "worstCase": "Schlechtester Fall"
+    "worstCase": "Schlechtester Fall",
+    "rawPrice": "Roh-Preis",
+    "rawPriceHint": "Marktpreis des rohen Proc-Items. Oft teurer als das fertige Item.",
+    "rawLabel": "Roh-{{tier}}",
+    "decision": "Roh verkaufen vs. fertig craften",
+    "sellRaw": "Roh verkaufen",
+    "craftFinished": "Fertig craften",
+    "noRawPrice": "Roh-Preis eingeben ↑",
+    "noPrice": "Verkaufspreis eingeben",
+    "recommendSellRaw": "Roh verkaufen",
+    "recommendCraft": "Fertig craften",
+    "procUsingRaw": "Proc-Einnahmen nutzen Roh-Preis"
   }
 }

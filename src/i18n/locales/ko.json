@@ -132,6 +132,17 @@
     "trashIntermediates": "중간 결과물 버리기",
     "trashIntermediatesDesc": "부산물 수익 무시 — 최악의 경우 시나리오",
     "trashed": "버림",
-    "worstCase": "최악의 경우"
+    "worstCase": "최악의 경우",
+    "rawPrice": "원석 가격",
+    "rawPriceHint": "프록된 원석 아이템의 시장 가격. 낮은 등급에서는 완성품보다 비쌀 수 있음.",
+    "rawLabel": "{{tier}} 원석",
+    "decision": "원석 판매 vs 완성품 제작",
+    "sellRaw": "원석 판매",
+    "craftFinished": "완성품 제작",
+    "noRawPrice": "원석 가격 입력 ↑",
+    "noPrice": "판매 가격 입력",
+    "recommendSellRaw": "원석 판매",
+    "recommendCraft": "완성품 제작",
+    "procUsingRaw": "프록 수익에 원석 가격 사용 중"
   }
 }

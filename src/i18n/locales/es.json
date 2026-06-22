@@ -132,6 +132,17 @@
     "trashIntermediates": "Tirar los intermedios",
     "trashIntermediatesDesc": "Ignorar ingresos de subproductos — peor caso posible",
     "trashed": "tirado",
-    "worstCase": "Peor caso"
+    "worstCase": "Peor caso",
+    "rawPrice": "Precio bruto",
+    "rawPriceHint": "Precio de mercado del item bruto (proc). Suele ser más caro que el item terminado en tiers bajos.",
+    "rawLabel": "Bruto {{tier}}",
+    "decision": "Vender bruto vs craftar terminado",
+    "sellRaw": "Vender bruto",
+    "craftFinished": "Craftar terminado",
+    "noRawPrice": "Ingresar precio bruto ↑",
+    "noPrice": "Ingresar precio de venta",
+    "recommendSellRaw": "Vender bruto",
+    "recommendCraft": "Craftar terminado",
+    "procUsingRaw": "Ingreso de proc usa precio bruto"
   }
 }

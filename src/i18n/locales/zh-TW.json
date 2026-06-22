@@ -132,6 +132,17 @@
     "trashIntermediates": "捨棄中間產物",
     "trashIntermediatesDesc": "忽略副產品收益 — 最壞情況",
     "trashed": "已捨棄",
-    "worstCase": "最壞情況"
+    "worstCase": "最壞情況",
+    "rawPrice": "原石價格",
+    "rawPriceHint": "觸發原石物品的市場價格。低階裝備的原石通常比完成品更貴。",
+    "rawLabel": "{{tier}}原石",
+    "decision": "賣原石 vs 製作完成品",
+    "sellRaw": "賣原石",
+    "craftFinished": "製作完成品",
+    "noRawPrice": "輸入原石價格 ↑",
+    "noPrice": "輸入販售價格",
+    "recommendSellRaw": "賣原石",
+    "recommendCraft": "製作完成品",
+    "procUsingRaw": "觸發收益使用原石價格"
   }
 }

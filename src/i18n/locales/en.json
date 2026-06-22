@@ -132,6 +132,17 @@
     "trashIntermediates": "Trash intermediates",
     "trashIntermediatesDesc": "Ignore byproduct revenue — worst case scenario",
     "trashed": "trashed",
-    "worstCase": "Worst case"
+    "worstCase": "Worst case",
+    "rawPrice": "Raw price",
+    "rawPriceHint": "Market price of the raw proc item (e.g. raw Epic sword from crafting Rare). Often higher than the finished item for lower tiers.",
+    "rawLabel": "Raw {{tier}}",
+    "decision": "Sell raw vs craft finished",
+    "sellRaw": "Sell Raw",
+    "craftFinished": "Craft Finished",
+    "noRawPrice": "Enter raw price ↑",
+    "noPrice": "Enter sale price",
+    "recommendSellRaw": "Sell raw",
+    "recommendCraft": "Craft finished",
+    "procUsingRaw": "Proc revenue uses raw price"
   }
 }

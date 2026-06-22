@@ -131,6 +131,17 @@
     "trashIntermediates": "Jeter les intermédiaires",
     "trashIntermediatesDesc": "Ignorer les revenus des sous-produits — pire cas possible",
     "trashed": "jeté",
-    "worstCase": "Pire cas"
+    "worstCase": "Pire cas",
+    "rawPrice": "Prix brut",
+    "rawPriceHint": "Prix marché de l'item brut (ex: épée Épique brute procée en craftant du Rare). Souvent plus cher que le fini dans les basses catégories.",
+    "rawLabel": "Brut {{tier}}",
+    "decision": "Vendre brut vs crafter fini",
+    "sellRaw": "Vendre brut",
+    "craftFinished": "Crafter fini",
+    "noRawPrice": "Entrer prix brut ↑",
+    "noPrice": "Entrer prix de vente",
+    "recommendSellRaw": "Vendre brut",
+    "recommendCraft": "Crafter fini",
+    "procUsingRaw": "Revenu de proc calculé au prix brut"
   }
 }
